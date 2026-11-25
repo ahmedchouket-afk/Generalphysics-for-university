@@ -1,0 +1,3021 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed Chouket General Physics Courses for University</title>
+  <!-- Tailwind CSS (avec styles de repli intégrés pour fonctionnement 100% hors-ligne garanti) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --navy-deep: #0f3564;
+      --steel-blue: #1d528a;
+      --ice-blue: #e4effc;
+      --vivid-blue: #1362a7;
+      --page-bg: #f4f7fb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--page-bg);
+      color: #1e293b;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+    }
+    @keyframes atomSpinSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes electronPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.18); }
+    }
+    .atom-orbit {
+      transform-origin: 32px 32px;
+      animation: atomSpinSlow 24s linear infinite;
+    }
+    .atom-core {
+      transform-origin: 32px 32px;
+      animation: electronPulse 3s ease-in-out infinite;
+    }
+    .formula-box {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #f8fafc;
+      border-left: 4px solid #1362a7;
+      padding: 0.65rem 0.9rem;
+      border-radius: 0.5rem;
+      color: #0f3564;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    .dropzone-active {
+      border-color: #1362a7 !important;
+      background-color: #e4effc !important;
+      transform: scale(1.01);
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+    /* Print styles */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; }
+      main { max-width: 100% !important; padding: 0 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- =======================================================================
+       1. BANNIÈRE SUPÉRIEURE BLEU NUIT PROFOND (#0f3564)
+  ======================================================================== -->
+  <header class="bg-[#0f3564] text-white shadow-lg no-print">
+    <div class="max-w-7xl mx-auto px-4 pt-5 pb-6">
+      <!-- Barre supérieure : Sélecteur [FR | EN] + Boutons Télécharger & Importer/Upload -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-white/15">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-blue-200 bg-white/10 px-3 py-1.5 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span data-i18n="topBadge">Portail Universitaire • Physique Générale</span>
+          </span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          <!-- Sélecteur de langue bilingue [FR | EN] -->
+          <div class="inline-flex items-center bg-[#082244] p-1 rounded-xl border border-white/20 shadow-inner" role="group" aria-label="Sélecteur de langue">
+            <button id="btnLangFR" onclick="setLanguage('fr')"
+              class="px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition bg-white text-[#0f3564] shadow">
+              FR
+            </button>
+            <button id="btnLangEN" onclick="setLanguage('en')"
+              class="px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition text-blue-200 hover:text-white">
+              EN
+            </button>
+          </div>
+
+          <!-- Bouton Export / Télécharger la plateforme (.html) -->
+          <button onclick="downloadStandaloneHTML()"
+            class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl shadow transition">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span data-i18n="btnDownloadHtml">Télécharger la plateforme (.html)</span>
+          </button>
+
+          <!-- Bouton Importer / Upload -->
+          <button onclick="openUploadAndImport()"
+            class="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-400 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl shadow transition">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+            </svg>
+            <span data-i18n="btnImportUpload">Importer / Upload</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Identité centrale avec icône d'atome animée blanche -->
+      <div class="text-center max-w-5xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-3.5 mb-2">
+          <svg class="w-12 h-12 sm:w-14 sm:h-14 text-white shrink-0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle class="atom-core" cx="32" cy="32" r="5" fill="currentColor"/>
+            <g class="atom-orbit">
+              <ellipse cx="32" cy="32" rx="27" ry="10.5" stroke="currentColor" stroke-width="2.6"/>
+              <ellipse cx="32" cy="32" rx="27" ry="10.5" transform="rotate(60 32 32)" stroke="currentColor" stroke-width="2.6"/>
+              <ellipse cx="32" cy="32" rx="27" ry="10.5" transform="rotate(120 32 32)" stroke="currentColor" stroke-width="2.6"/>
+              <circle cx="59" cy="32" r="2.6" fill="#38bdf8"/>
+              <circle cx="18.5" cy="55.4" r="2.6" fill="#fbbf24"/>
+              <circle cx="18.5" cy="8.6" r="2.6" fill="#34d399"/>
+            </g>
+          </svg>
+          <h1 id="mainPlatformHeading" class="text-xl sm:text-3xl md:text-4xl font-black tracking-wide uppercase leading-tight">
+            AHMED CHOUKET GENERAL PHYSICS COURSES FOR UNIVERSITY
+          </h1>
+        </div>
+        <p id="mainSubtitle" class="text-sm sm:text-base md:text-lg text-blue-100 font-medium tracking-wide mt-2">
+          Prof. Ahmed Chouket • Construire • Brancher • Mesurer • Observer • Apprendre
+        </p>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         BARRE DE NAVIGATION BLEU ACIER (#1d528a)
+    ====================================================================== -->
+    <nav class="bg-[#1d528a] border-t border-white/15">
+      <div class="max-w-7xl mx-auto px-3 py-2">
+        <ul class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold">
+          <li>
+            <button data-nav="accueil" onclick="navigateTo('accueil')" data-i18n="navHome"
+              class="nav-tab px-4 py-2 rounded-xl transition bg-white text-[#0f3564] shadow-sm">
+              Accueil
+            </button>
+          </li>
+          <li>
+            <button data-nav="cours" onclick="navigateTo('cours')" data-i18n="navCourses"
+              class="nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white">
+              Cours
+            </button>
+          </li>
+          <li>
+            <button data-nav="laboratoire" onclick="navigateTo('laboratoire')" data-i18n="navLab"
+              class="nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white">
+              Laboratoire
+            </button>
+          </li>
+          <li>
+            <button data-nav="exercices" onclick="navigateTo('exercices')" data-i18n="navExercises"
+              class="nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white">
+              Exercices
+            </button>
+          </li>
+          <li>
+            <button data-nav="ressources" onclick="navigateTo('ressources')" data-i18n="navResources"
+              class="nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white">
+              Ressources &amp; Upload
+            </button>
+          </li>
+          <li>
+            <button data-nav="apropos" onclick="navigateTo('apropos')" data-i18n="navAbout"
+              class="nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white">
+              À propos
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Toast de notification non-bloquant -->
+  <div id="toastAlert" class="fixed bottom-5 right-5 z-50 hidden max-w-md bg-[#0f3564] text-white px-4 py-3 rounded-xl shadow-2xl border border-blue-400/40 text-xs sm:text-sm flex items-center gap-2.5">
+    <span id="toastIcon">✅</span>
+    <span id="toastText">Opération réussie.</span>
+  </div>
+
+  <!-- =======================================================================
+       SECTION HERO BLEU GLACIER (#e4effc)
+  ======================================================================== -->
+  <section id="heroSection" class="bg-[#e4effc] border-b border-blue-200/80 py-10 sm:py-12 px-4 text-center no-print">
+    <div class="max-w-4xl mx-auto">
+      <span data-i18n="heroTag" class="inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-white text-[#1362a7] border border-blue-200 shadow-xs mb-3">
+        Université de Tunis El Manar • IPEI El Manar • Bilingue FR / EN
+      </span>
+      <h2 data-i18n="heroTitle" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f3564] mb-3">
+        Bienvenue au laboratoire virtuel de physique
+      </h2>
+      <p data-i18n="heroDesc" class="text-slate-700 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        Explorez les lois fondamentales de la physique universitaire à travers des cours structurés, des schémas interactifs et quatre bancs d'essai expérimentaux en temps réel.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button onclick="navigateTo('laboratoire')"
+          class="px-5 py-3 bg-[#1362a7] hover:bg-[#0f3564] text-white font-semibold rounded-xl shadow transition flex items-center gap-2 text-sm">
+          <span>🔬</span>
+          <span data-i18n="heroCtaLab">Ouvrir le laboratoire virtuel</span>
+        </button>
+        <button onclick="navigateTo('cours')"
+          class="px-5 py-3 bg-white hover:bg-blue-50 text-[#0f3564] border border-blue-200 font-semibold rounded-xl shadow-xs transition flex items-center gap-2 text-sm">
+          <span>📚</span>
+          <span data-i18n="heroCtaCourses">Parcourir les 6 modules de cours</span>
+        </button>
+        <button onclick="navigateTo('ressources')"
+          class="px-5 py-3 bg-white/80 hover:bg-white text-slate-700 border border-slate-300 font-semibold rounded-xl transition flex items-center gap-2 text-sm">
+          <span>📤</span>
+          <span data-i18n="heroCtaUpload">Uploader / Télécharger</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       CONTENU PRINCIPAL
+  ======================================================================== -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-12">
+
+    <!-- *********************************************************************
+         SECTION A : MODULES DE COURS UNIVERSITAIRES (Accueil & Onglet Cours)
+    ********************************************************************** -->
+    <section id="section-cours" class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#1362a7] pl-3.5">
+          <h3 data-i18n="coursesHeading" class="text-xl sm:text-2xl font-bold text-[#0f3564]">
+            📚 Modules de Cours Universitaires
+          </h3>
+          <p data-i18n="coursesSubheading" class="text-xs sm:text-sm text-slate-600 mt-0.5">
+            Cliquez sur une carte pour ouvrir la fiche complète (équations, schémas SVG explicatifs et simulation associée).
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="courseFilterInput" type="text" oninput="renderCoursesGrid()"
+            placeholder="Rechercher un cours..."
+            class="px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1362a7] w-full sm:w-56" />
+          <button onclick="navigateTo('apropos'); setTimeout(() => document.getElementById('newCourseFormBox')?.scrollIntoView({behavior:'smooth'}), 100);"
+            class="px-3.5 py-2 text-xs sm:text-sm bg-[#1362a7] hover:bg-[#0f3564] text-white font-semibold rounded-xl transition shadow-xs whitespace-nowrap">
+            <span data-i18n="btnAddChapter">+ Nouveau chapitre</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grille des 6 cartes blanches + chapitres personnalisés -->
+      <div id="coursesCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Généré dynamiquement en JS -->
+      </div>
+
+      <!-- Bandeau d'accès rapide aux 4 bancs d'essai sur la page d'Accueil -->
+      <div id="homeLabPreviewBlock" class="pt-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div class="border-l-4 border-emerald-600 pl-3.5">
+            <h3 data-i18n="homeLabHeading" class="text-lg sm:text-xl font-bold text-[#0f3564]">
+              ⚡ Bancs d'Essai &amp; Simulateurs Interactifs (Temps Réel)
+            </h3>
+            <p data-i18n="homeLabSubheading" class="text-xs sm:text-sm text-slate-600">
+              Accédez directement à l'un des quatre simulateurs expérimentaux.
+            </p>
+          </div>
+          <button onclick="navigateTo('laboratoire')" data-i18n="linkFullLab" class="text-sm font-bold text-[#1362a7] hover:underline">
+            Tout le laboratoire →
+          </button>
+        </div>
+        <div id="homeLabQuickCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Généré dynamiquement -->
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************************
+         SECTION B : LABORATOIRE VIRTUEL INTERACTIF (4 Simulateurs Canvas)
+    ********************************************************************** -->
+    <section id="section-laboratoire" class="hidden space-y-6">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#1362a7] pl-3.5">
+          <h3 data-i18n="labHeading" class="text-xl sm:text-2xl font-bold text-[#0f3564]">
+            🔬 Laboratoire Virtuel Interactif
+          </h3>
+          <p data-i18n="labSubheading" class="text-xs sm:text-sm text-slate-600">
+            Ajustez les curseurs expérimentaux en direct et observez les phénomènes physiques sur l'écran de mesure.
+          </p>
+        </div>
+
+        <!-- Onglets des 4 bancs d'essai -->
+        <div class="flex flex-wrap gap-2">
+          <button id="tabSim-optics" onclick="selectSimulator('optics')" data-i18n="simTab1"
+            class="sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1362a7] text-white shadow transition">
+            Banc 1 : Interférences &amp; Lame Mince
+          </button>
+          <button id="tabSim-mechanics" onclick="selectSimulator('mechanics')" data-i18n="simTab2"
+            class="sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 transition">
+            Banc 2 : Oscillateur &amp; Phase
+          </button>
+          <button id="tabSim-rlc" onclick="selectSimulator('rlc')" data-i18n="simTab3"
+            class="sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 transition">
+            Banc 3 : Circuit RLC &amp; Oscilloscope
+          </button>
+          <button id="tabSim-quantum" onclick="selectSimulator('quantum')" data-i18n="simTab4"
+            class="sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 transition">
+            Banc 4 : Puits Quantique
+          </button>
+        </div>
+      </div>
+
+      <!-- Châssis principal du simulateur -->
+      <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+        <!-- En-tête du banc actif -->
+        <div class="bg-slate-50 border-b border-slate-200 px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 id="activeSimTitle" class="text-base sm:text-lg font-extrabold text-[#0f3564]">
+              Banc 1 : Interférences &amp; Lame Mince
+            </h4>
+            <p id="activeSimSubtitle" class="text-xs sm:text-sm text-slate-500">
+              Réflexion et transmission sur lame mince d'indice n et profil d'intensité I(x).
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btnSimPlayPause" onclick="toggleSimPause()"
+              class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition shadow-xs">
+              ⏸ Pause
+            </button>
+            <button onclick="resetActiveSimulator()" data-i18n="btnSimReset"
+              class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-bold transition">
+              ↺ Réinitialiser
+            </button>
+          </div>
+        </div>
+
+        <!-- Grille Canvas (8 cols) + Contrôles & Mesures (4 cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-8 bg-slate-950 p-4 sm:p-5 flex flex-col justify-between">
+            <div id="simCanvasWrapper" class="w-full h-[360px] sm:h-[430px] relative rounded-xl overflow-hidden border border-slate-800">
+              <canvas id="physicsCanvas"></canvas>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 font-mono">
+              <span id="simStatusIndicator">● RUN • 60 FPS</span>
+              <span data-i18n="simCanvasHint">Modifiez les curseurs à droite pour observer la réponse physique</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 p-5 sm:p-6 bg-white border-t lg:border-t-0 lg:border-l border-slate-200 flex flex-col justify-between space-y-6">
+            <div>
+              <h5 data-i18n="simControlsTitle" class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-4">
+                Paramètres du banc d'essai
+              </h5>
+              <div id="simSlidersContainer" class="space-y-4">
+                <!-- Curseurs générés dynamiquement -->
+              </div>
+            </div>
+
+            <div class="bg-[#f4f7fb] rounded-xl p-4 border border-blue-100">
+              <h5 class="text-xs font-extrabold uppercase tracking-wider text-[#0f3564] mb-3 flex items-center gap-1.5">
+                <span>📟</span>
+                <span data-i18n="simMeasurementsTitle">Mesures numériques en temps réel</span>
+              </h5>
+              <div id="simReadoutsGrid" class="grid grid-cols-2 gap-2.5 text-xs">
+                <!-- Valeurs mesurées générées dynamiquement -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************************
+         SECTION C : EXERCICES & AUTO-ÉVALUATION (TD + QCM 6 questions)
+    ********************************************************************** -->
+    <section id="section-exercices" class="hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#1362a7] pl-3.5">
+          <h3 data-i18n="exHeading" class="text-xl sm:text-2xl font-bold text-[#0f3564]">
+            ✍️ Exercices Universitaires &amp; Auto-évaluation
+          </h3>
+          <p data-i18n="exSubheading" class="text-xs sm:text-sm text-slate-600">
+            Problèmes dirigés avec indices progressifs, corrigés détaillés et QCM interactif bilingue.
+          </p>
+        </div>
+        <div id="exTopicFilters" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <!-- Liste des problèmes dirigés -->
+      <div id="problemsListContainer" class="space-y-5"></div>
+
+      <!-- QCM Interactif de 6 questions -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+          <div>
+            <span data-i18n="quizBadge" class="inline-block px-3 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#1362a7] mb-1">
+              Test de connaissances • 6 Questions
+            </span>
+            <h4 data-i18n="quizHeading" class="text-lg sm:text-xl font-extrabold text-[#0f3564]">
+              QCM Interactif de Physique Générale
+            </h4>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="quizScoreDisplay" class="px-4 py-2 rounded-xl bg-[#e4effc] text-[#0f3564] font-extrabold text-sm">
+              Score : 0 / 6
+            </span>
+            <button onclick="resetQuiz()" data-i18n="btnResetQuiz"
+              class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition">
+              ↺ Réinitialiser
+            </button>
+          </div>
+        </div>
+
+        <div id="quizQuestionsContainer" class="space-y-6"></div>
+      </div>
+    </section>
+
+    <!-- *********************************************************************
+         SECTION D : RESSOURCES, UPLOAD & TÉLÉCHARGEMENT
+    ********************************************************************** -->
+    <section id="section-ressources" class="hidden space-y-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#1362a7] pl-3.5">
+          <h3 data-i18n="resHeading" class="text-xl sm:text-2xl font-bold text-[#0f3564]">
+            📂 Ressources Pédagogiques, Upload &amp; Exportation
+          </h3>
+          <p data-i18n="resSubheading" class="text-xs sm:text-sm text-slate-600">
+            Importez vos supports (PDF, Python, Excel, images, sauvegardes JSON) ou téléchargez les fiches et la plateforme complète.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button onclick="downloadStandaloneHTML()"
+            class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition">
+            ⬇ <span data-i18n="btnDownloadHtml">Télécharger la plateforme (.html)</span>
+          </button>
+          <button onclick="exportDataJSON()"
+            class="px-3.5 py-2 bg-[#1362a7] hover:bg-[#0f3564] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition">
+            📄 <span data-i18n="btnExportJson">Exporter les données (.json)</span>
+          </button>
+          <button onclick="window.print()"
+            class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-semibold rounded-xl transition">
+            🖨 <span data-i18n="btnPrintPdf">Imprimer / PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Zone Drag & Drop d'Upload -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+        <div id="dropZoneBox"
+          class="border-2 border-dashed border-blue-300 bg-[#f4f7fb] rounded-2xl p-6 sm:p-8 text-center transition cursor-pointer hover:border-[#1362a7]">
+          <div class="text-4xl mb-2">📤</div>
+          <h4 data-i18n="dropTitle" class="text-base sm:text-lg font-extrabold text-[#0f3564]">
+            Glissez-déposez vos fichiers ici ou cliquez pour sélectionner
+          </h4>
+          <p data-i18n="dropFormats" class="text-xs sm:text-sm text-slate-500 mt-1">
+            Supports acceptés : PDF (.pdf), Scripts Python (.py), Données (.xlsx, .csv), Images (.png, .jpg, .svg), Texte/Markdown (.txt, .md) ou Sauvegarde (.json)
+          </p>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <select id="uploadCategorySelect" class="px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1362a7]">
+              <option value="Cours / Lecture Notes">Cours / Lecture Notes</option>
+              <option value="TD & Exercices / Problem Sets">TD &amp; Exercices / Problem Sets</option>
+              <option value="TP & Code Python / Lab & Scripts">TP &amp; Code Python / Lab &amp; Scripts</option>
+              <option value="Données Expérimentales / Data">Données Expérimentales / Experimental Data</option>
+            </select>
+            <input id="fileInputHidden" type="file" multiple
+              accept=".pdf,.py,.xlsx,.xls,.csv,.png,.jpg,.jpeg,.svg,.txt,.md,.json,.doc,.docx,.ppt,.pptx"
+              class="hidden" onchange="handleUploadedFiles(this.files)" />
+            <button type="button" onclick="document.getElementById('fileInputHidden').click()"
+              class="px-5 py-2 bg-[#1362a7] hover:bg-[#0f3564] text-white text-xs sm:text-sm font-bold rounded-xl shadow transition">
+              <span data-i18n="btnSelectFiles">Choisir des fichiers sur l'ordinateur</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bibliothèque des fichiers uploadés -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h4 data-i18n="uploadedLibHeading" class="text-sm font-extrabold uppercase tracking-wider text-[#0f3564]">
+              Bibliothèque des supports uploadés (sauvegardés localement &amp; inclus dans l'export HTML)
+            </h4>
+            <span id="uploadedCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#1362a7]">0</span>
+          </div>
+          <div id="uploadedFilesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Généré dynamiquement -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Fiches Ressources Intégrées Téléchargeables & Imprimables -->
+      <div>
+        <h4 data-i18n="builtinResHeading" class="text-lg font-bold text-[#0f3564] mb-4">
+          📘 Fiches Ressources &amp; Protocoles Intégrés
+        </h4>
+        <div id="builtinResourcesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Généré dynamiquement -->
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************************
+         SECTION E : À PROPOS & GESTION ENSEIGNANT
+    ********************************************************************** -->
+    <section id="section-apropos" class="hidden space-y-8">
+      <div class="border-l-4 border-[#1362a7] pl-3.5">
+        <h3 data-i18n="aboutHeading" class="text-xl sm:text-2xl font-bold text-[#0f3564]">
+          🎓 À propos &amp; Espace Enseignant
+        </h3>
+        <p data-i18n="aboutSubheading" class="text-xs sm:text-sm text-slate-600">
+          Présentation académique et outils d'ajout rapide de chapitres ou ressources pédagogiques.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Présentation académique (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-7 flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-[#0f3564] text-white flex items-center justify-center font-black text-lg shadow">
+                AC
+              </div>
+              <div>
+                <h4 class="text-lg font-extrabold text-[#0f3564]">Prof. Ahmed Chouket</h4>
+                <p data-i18n="aboutAffiliation" class="text-xs font-semibold text-[#1362a7]">
+                  Université de Tunis El Manar • IPEI El Manar
+                </p>
+              </div>
+            </div>
+
+            <p data-i18n="aboutBio1" class="text-sm text-slate-600 leading-relaxed">
+              Enseignant-chercheur en Physique à l'Institut Préparatoire aux Études d'Ingénieurs d'El Manar (IPEIEM — Université de Tunis El Manar). Enseignements dédiés à l'Optique Ondulatoire, la Physique Quantique, l'Électromagnétisme et la Physique Générale pour les cycles préparatoires et universitaires.
+            </p>
+            <p data-i18n="aboutBio2" class="text-sm text-slate-600 leading-relaxed">
+              Cette plateforme interactive clé en main est conçue pour permettre aux étudiants de manipuler les équations physiques en temps réel, et à l'enseignant d'enrichir librement ses supports de cours et de les diffuser sous forme d'un fichier HTML autonome.
+            </p>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <div class="p-3.5 rounded-xl bg-[#f4f7fb] border border-blue-100">
+                <div class="text-lg font-black text-[#0f3564]">FR / EN</div>
+                <div data-i18n="aboutMetric1" class="text-xs text-slate-600">Interface bilingue instantanée</div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#f4f7fb] border border-blue-100">
+                <div class="text-lg font-black text-[#0f3564]">Hors-ligne</div>
+                <div data-i18n="aboutMetric2" class="text-xs text-slate-600">Fichier HTML autonome exportable</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap gap-2">
+            <button onclick="downloadStandaloneHTML()"
+              class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-xs">
+              ⬇ <span data-i18n="btnDownloadHtml">Télécharger la plateforme (.html)</span>
+            </button>
+            <button onclick="exportDataJSON()"
+              class="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#1362a7] text-xs sm:text-sm font-bold rounded-xl transition">
+              📄 JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- Formulaire d'ajout rapide de nouveau chapitre de cours (7 cols) -->
+        <div id="newCourseFormBox" class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-7">
+          <div class="border-b border-slate-100 pb-3 mb-5">
+            <span data-i18n="teacherBadge" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#1362a7] mb-1">
+              Gestion Enseignant
+            </span>
+            <h4 data-i18n="addCourseFormTitle" class="text-lg font-extrabold text-[#0f3564]">
+              Ajouter un nouveau chapitre de cours (Bilingue FR / EN)
+            </h4>
+            <p data-i18n="addCourseFormSub" class="text-xs text-slate-500">
+              Le nouveau module est immédiatement publié dans l'onglet Cours, sauvegardé localement et inclus lors du téléchargement HTML.
+            </p>
+          </div>
+
+          <form onsubmit="handleCreateCourse(event)" class="space-y-4 text-xs sm:text-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Titre du chapitre (Français) *</label>
+                <input id="inpCourseTitleFr" type="text" required placeholder="Ex: Thermodynamique Statistique"
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Chapter Title (English) *</label>
+                <input id="inpCourseTitleEn" type="text" required placeholder="Ex: Statistical Thermodynamics"
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Domaine (FR) *</label>
+                <input id="inpCourseDomFr" type="text" required placeholder="Ex: Thermodynamique"
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Domain (EN) *</label>
+                <input id="inpCourseDomEn" type="text" required placeholder="Ex: Thermodynamics"
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+              <div>
+                <label data-i18n="labelLinkedSim" class="block font-bold text-slate-700 mb-1">Simulateur lié</label>
+                <select id="inpCourseSim" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none">
+                  <option value="optics">Banc 1 : Optique / Interférences</option>
+                  <option value="mechanics">Banc 2 : Oscillateur Mécanique</option>
+                  <option value="rlc">Banc 3 : Circuit RLC</option>
+                  <option value="quantum">Banc 4 : Puits Quantique</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Résumé court (FR) *</label>
+                <input id="inpCourseSumFr" type="text" required placeholder="Entropie, facteur de Boltzmann et fonction de partition..."
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Short Summary (EN) *</label>
+                <input id="inpCourseSumEn" type="text" required placeholder="Entropy, Boltzmann factor, and partition function..."
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label data-i18n="labelKeyEqs" class="block font-bold text-slate-700 mb-1">Équations clés (1 par ligne) *</label>
+              <textarea id="inpCourseEqs" rows="2" required placeholder="S = k_B · ln(Ω)&#10;P_i = exp(-E_i / k_B T) / Z"
+                class="w-full px-3.5 py-2 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-[#1362a7] focus:outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Exposé théorique (FR) *</label>
+                <textarea id="inpCourseBodyFr" rows="3" required placeholder="Développement détaillé du chapitre..."
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Theoretical Overview (EN) *</label>
+                <textarea id="inpCourseBodyEn" rows="3" required placeholder="Detailed chapter overview..."
+                  class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1362a7] focus:outline-none"></textarea>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-2 pt-2">
+              <button type="submit"
+                class="px-5 py-2.5 bg-[#1362a7] hover:bg-[#0f3564] text-white font-bold rounded-xl shadow transition">
+                ✅ <span data-i18n="btnPublishChapter">Publier le chapitre</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =======================================================================
+       PIED DE PAGE
+  ======================================================================== -->
+  <footer class="bg-[#0f3564] text-blue-100 text-xs sm:text-sm py-6 px-4 mt-12 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div>
+        <span class="font-extrabold text-white">AHMED CHOUKET GENERAL PHYSICS COURSES FOR UNIVERSITY</span>
+        <span class="hidden sm:inline"> • </span>
+        <span class="block sm:inline text-blue-200">Prof. Ahmed Chouket (IPEI El Manar / Université de Tunis El Manar)</span>
+      </div>
+      <div id="footerMottoText" class="text-blue-200/90 font-medium">
+        Construire • Brancher • Mesurer • Observer • Apprendre
+      </div>
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       MODALE LECTEUR DE COURS DÉTAILLÉ
+  ======================================================================== -->
+  <div id="courseDetailModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="bg-[#0f3564] text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <span id="modalCourseDomain" class="text-xs font-bold uppercase tracking-wider text-blue-200">Domaine</span>
+          <h3 id="modalCourseHeading" class="text-lg sm:text-xl font-extrabold">Titre du module</h3>
+        </div>
+        <button onclick="closeCourseModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white font-bold">✕</button>
+      </div>
+
+      <div id="modalCourseContent" class="p-6 overflow-y-auto space-y-5 text-sm sm:text-base text-slate-700 leading-relaxed">
+        <!-- Injecté dynamiquement -->
+      </div>
+
+      <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap gap-2">
+          <button id="modalOpenSimBtn"
+            class="px-4 py-2 bg-[#1362a7] hover:bg-[#0f3564] text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-xs">
+            🔬 <span data-i18n="btnOpenInSim">Ouvrir dans le simulateur</span>
+          </button>
+          <button onclick="window.print()"
+            class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-bold rounded-xl transition">
+            🖨 <span data-i18n="btnPrintPdf">Imprimer / PDF</span>
+          </button>
+        </div>
+        <button onclick="closeCourseModal()" data-i18n="btnCloseModal"
+          class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-bold rounded-xl transition">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODALE APERÇU DE RESSOURCE / FICHIER UPLOADÉ
+  ======================================================================== -->
+  <div id="resourcePreviewModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="bg-[#1d528a] text-white px-6 py-4 flex items-center justify-between">
+        <h3 id="resModalHeading" class="text-base sm:text-lg font-extrabold truncate pr-4">Ressource</h3>
+        <button onclick="closeResourceModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white font-bold">✕</button>
+      </div>
+      <div id="resModalBody" class="p-6 overflow-y-auto space-y-4"></div>
+      <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end gap-2">
+        <button id="resModalDownloadBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl transition">
+          ⬇ <span data-i18n="btnDownloadFile">Télécharger</span>
+        </button>
+        <button onclick="closeResourceModal()" data-i18n="btnCloseModal" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-bold rounded-xl transition">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteneur JSON embarqué pour préserver l'état personnalisé dans le fichier HTML téléchargé -->
+  <script id="embedded-platform-data" type="application/json">null</script>
+
+  <!-- =======================================================================
+       JAVASCRIPT COMPLET : BILINGUISME, COURS, 4 SIMULATEURS, QCM, UPLOAD/EXPORT
+  ======================================================================== -->
+  <script>
+    // =========================================================================
+    // 1. DICTIONNAIRE BILINGUE [FR | EN]
+    // =========================================================================
+    const TRANSLATIONS = {
+      fr: {
+        topBadge: "Portail Universitaire • Physique Générale",
+        subtitle: "Prof. Ahmed Chouket • Construire • Brancher • Mesurer • Observer • Apprendre",
+        motto: "Construire • Brancher • Mesurer • Observer • Apprendre",
+        btnDownloadHtml: "Télécharger la plateforme (.html)",
+        btnImportUpload: "Importer / Upload",
+        navHome: "Accueil",
+        navCourses: "Cours",
+        navLab: "Laboratoire",
+        navExercises: "Exercices",
+        navResources: "Ressources & Upload",
+        navAbout: "À propos",
+        heroTag: "Université de Tunis El Manar • IPEI El Manar • Bilingue FR / EN",
+        heroTitle: "Bienvenue au laboratoire virtuel de physique",
+        heroDesc: "Explorez les lois fondamentales de la physique universitaire à travers des cours structurés, des schémas interactifs et quatre bancs d'essai expérimentaux en temps réel.",
+        heroCtaLab: "Ouvrir le laboratoire virtuel",
+        heroCtaCourses: "Parcourir les 6 modules de cours",
+        heroCtaUpload: "Uploader / Télécharger",
+        coursesHeading: "📚 Modules de Cours Universitaires",
+        coursesSubheading: "Cliquez sur une carte pour ouvrir la fiche complète (équations, schémas SVG explicatifs et simulation associée).",
+        searchPlaceholder: "Rechercher un cours...",
+        btnAddChapter: "+ Nouveau chapitre",
+        homeLabHeading: "⚡ Bancs d'Essai & Simulateurs Interactifs (Temps Réel)",
+        homeLabSubheading: "Accédez directement à l'un des quatre simulateurs expérimentaux.",
+        linkFullLab: "Tout le laboratoire →",
+        labHeading: "🔬 Laboratoire Virtuel Interactif",
+        labSubheading: "Ajustez les curseurs expérimentaux en direct et observez les phénomènes physiques sur l'écran de mesure.",
+        simTab1: "Banc 1 : Interférences & Lame Mince",
+        simTab2: "Banc 2 : Oscillateur & Phase",
+        simTab3: "Banc 3 : Circuit RLC & Oscilloscope",
+        simTab4: "Banc 4 : Puits Quantique",
+        btnSimReset: "↺ Réinitialiser",
+        simCanvasHint: "Modifiez les curseurs à droite pour observer la réponse physique",
+        simControlsTitle: "Paramètres du banc d'essai",
+        simMeasurementsTitle: "Mesures numériques en temps réel",
+        exHeading: "✍️ Exercices Universitaires & Auto-évaluation",
+        exSubheading: "Problèmes dirigés avec indices progressifs, corrigés détaillés et QCM interactif bilingue.",
+        quizBadge: "Test de connaissances • 6 Questions",
+        quizHeading: "QCM Interactif de Physique Générale",
+        btnResetQuiz: "↺ Réinitialiser",
+        resHeading: "📂 Ressources Pédagogiques, Upload & Exportation",
+        resSubheading: "Importez vos supports (PDF, Python, Excel, images, sauvegardes JSON) ou téléchargez les fiches et la plateforme complète.",
+        btnExportJson: "Exporter les données (.json)",
+        btnPrintPdf: "Imprimer / PDF",
+        dropTitle: "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
+        dropFormats: "Supports acceptés : PDF (.pdf), Scripts Python (.py), Données (.xlsx, .csv), Images (.png, .jpg, .svg), Texte/Markdown (.txt, .md) ou Sauvegarde (.json)",
+        btnSelectFiles: "Choisir des fichiers sur l'ordinateur",
+        uploadedLibHeading: "Bibliothèque des supports uploadés (sauvegardés localement & inclus dans l'export HTML)",
+        builtinResHeading: "📘 Fiches Ressources & Protocoles Intégrés",
+        aboutHeading: "🎓 À propos & Espace Enseignant",
+        aboutSubheading: "Présentation académique et outils d'ajout rapide de chapitres ou ressources pédagogiques.",
+        aboutAffiliation: "Université de Tunis El Manar • IPEI El Manar",
+        aboutBio1: "Enseignant-chercheur en Physique à l'Institut Préparatoire aux Études d'Ingénieurs d'El Manar (IPEIEM — Université de Tunis El Manar). Enseignements dédiés à l'Optique Ondulatoire, la Physique Quantique, l'Électromagnétisme et la Physique Générale pour les cycles préparatoires et universitaires.",
+        aboutBio2: "Cette plateforme interactive clé en main est conçue pour permettre aux étudiants de manipuler les équations physiques en temps réel, et à l'enseignant d'enrichir librement ses supports de cours et de les diffuser sous forme d'un fichier HTML autonome.",
+        aboutMetric1: "Interface bilingue instantanée",
+        aboutMetric2: "Fichier HTML autonome exportable",
+        teacherBadge: "Gestion Enseignant",
+        addCourseFormTitle: "Ajouter un nouveau chapitre de cours (Bilingue FR / EN)",
+        addCourseFormSub: "Le nouveau module est immédiatement publié dans l'onglet Cours, sauvegardé localement et inclus lors du téléchargement HTML.",
+        labelLinkedSim: "Simulateur lié",
+        labelKeyEqs: "Équations clés (1 par ligne) *",
+        btnPublishChapter: "Publier le chapitre",
+        btnOpenInSim: "Ouvrir dans le simulateur",
+        btnCloseModal: "Fermer",
+        btnDownloadFile: "Télécharger",
+        openCardBtn: "Consulter le cours →",
+        eqSectionTitle: "Équations fondamentales",
+        schemaSectionTitle: "Schéma physique explicatif",
+        theorySectionTitle: "Développement théorique",
+        objectivesSectionTitle: "Objectifs d'apprentissage",
+        btnShowHint: "💡 Afficher l'indice",
+        btnHideHint: "💡 Masquer l'indice",
+        btnShowSol: "✅ Afficher le corrigé détaillé",
+        btnHideSol: "✅ Masquer le corrigé",
+        allTopics: "Tous les thèmes",
+        noUploadsMsg: "Aucun fichier uploadé pour le moment. Glissez-déposez vos supports PDF, Python, Excel ou JSON ci-dessus.",
+        previewBtn: "Aperçu",
+        deleteBtn: "Supprimer",
+        customTag: "Chapitre ajouté"
+      },
+      en: {
+        topBadge: "University Portal • General Physics",
+        subtitle: "Prof. Ahmed Chouket • Build • Connect • Measure • Observe • Learn",
+        motto: "Build • Connect • Measure • Observe • Learn",
+        btnDownloadHtml: "Download Platform (.html)",
+        btnImportUpload: "Import / Upload",
+        navHome: "Home",
+        navCourses: "Courses",
+        navLab: "Laboratory",
+        navExercises: "Exercises",
+        navResources: "Resources & Upload",
+        navAbout: "About",
+        heroTag: "University of Tunis El Manar • IPEI El Manar • Bilingual FR / EN",
+        heroTitle: "Welcome to the Virtual Physics Laboratory",
+        heroDesc: "Explore the fundamental laws of university physics through structured lectures, interactive diagrams, and four real-time experimental test benches.",
+        heroCtaLab: "Open Virtual Laboratory",
+        heroCtaCourses: "Browse the 6 Course Modules",
+        heroCtaUpload: "Upload / Download",
+        coursesHeading: "📚 University Course Modules",
+        coursesSubheading: "Click any card to open the complete lecture sheet (key equations, explanatory SVG diagrams, and linked simulation).",
+        searchPlaceholder: "Search a course...",
+        btnAddChapter: "+ New Chapter",
+        homeLabHeading: "⚡ Interactive Test Benches & Simulators (Real-Time)",
+        homeLabSubheading: "Jump directly into any of the four experimental virtual test benches.",
+        linkFullLab: "Full laboratory →",
+        labHeading: "🔬 Interactive Virtual Laboratory",
+        labSubheading: "Adjust experimental sliders live and observe physical phenomena directly on the measuring screen.",
+        simTab1: "Bench 1: Interference & Thin Film",
+        simTab2: "Bench 2: Oscillator & Phase Space",
+        simTab3: "Bench 3: Series RLC & Oscilloscope",
+        simTab4: "Bench 4: Quantum Potential Well",
+        btnSimReset: "↺ Reset",
+        simCanvasHint: "Adjust the sliders on the right to observe the physical response",
+        simControlsTitle: "Test Bench Parameters",
+        simMeasurementsTitle: "Real-Time Digital Measurements",
+        exHeading: "✍️ University Exercises & Self-Assessment",
+        exSubheading: "Directed university problem sets with progressive hints, detailed solutions, and an interactive bilingual quiz.",
+        quizBadge: "Knowledge Check • 6 Questions",
+        quizHeading: "Interactive General Physics Quiz",
+        btnResetQuiz: "↺ Reset",
+        resHeading: "📂 Teaching Resources, Upload & Export",
+        resSubheading: "Import course materials (PDF, Python, Excel, images, JSON backups) or download reference sheets and the full standalone platform.",
+        btnExportJson: "Export Course Data (.json)",
+        btnPrintPdf: "Print / PDF",
+        dropTitle: "Drag & drop your files here or click to select",
+        dropFormats: "Supported formats: PDF (.pdf), Python Scripts (.py), Data (.xlsx, .csv), Images (.png, .jpg, .svg), Text/Markdown (.txt, .md), or Backup (.json)",
+        btnSelectFiles: "Choose files from computer",
+        uploadedLibHeading: "Uploaded Materials Library (saved locally & embedded in HTML export)",
+        builtinResHeading: "📘 Built-in Reference Sheets & Lab Protocols",
+        aboutHeading: "🎓 About & Instructor Management",
+        aboutSubheading: "Academic presentation and quick-add tools for new course chapters or teaching resources.",
+        aboutAffiliation: "University of Tunis El Manar • IPEI El Manar",
+        aboutBio1: "Professor of Physics at the Preparatory Institute for Engineering Studies of El Manar (IPEIEM — University of Tunis El Manar). Teaching Wave Optics, Quantum Physics, Electromagnetism, and General Physics for undergraduate and engineering preparatory programs.",
+        aboutBio2: "This turnkey interactive platform enables students to manipulate physical equations in real time, while empowering instructors to freely expand lecture materials and distribute the entire environment as a standalone HTML file.",
+        aboutMetric1: "Instant bilingual interface",
+        aboutMetric2: "Exportable standalone HTML file",
+        teacherBadge: "Instructor Management",
+        addCourseFormTitle: "Add a New Course Chapter (Bilingual FR / EN)",
+        addCourseFormSub: "The new module is immediately published in the Courses tab, saved locally, and embedded when downloading the HTML platform.",
+        labelLinkedSim: "Linked Simulator",
+        labelKeyEqs: "Key Equations (1 per line) *",
+        btnPublishChapter: "Publish Chapter",
+        btnOpenInSim: "Open in Simulator",
+        btnCloseModal: "Close",
+        btnDownloadFile: "Download",
+        openCardBtn: "Open Course →",
+        eqSectionTitle: "Fundamental Equations",
+        schemaSectionTitle: "Explanatory Physical Diagram",
+        theorySectionTitle: "Theoretical Development",
+        objectivesSectionTitle: "Learning Objectives",
+        btnShowHint: "💡 Show Hint",
+        btnHideHint: "💡 Hide Hint",
+        btnShowSol: "✅ Show Detailed Solution",
+        btnHideSol: "✅ Hide Solution",
+        allTopics: "All Topics",
+        noUploadsMsg: "No files uploaded yet. Drag and drop your PDF, Python, Excel, or JSON files above.",
+        previewBtn: "Preview",
+        deleteBtn: "Delete",
+        customTag: "Added Chapter"
+      }
+    };
+
+    // =========================================================================
+    // 2. DONNÉES DES 6 MODULES DE COURS UNIVERSITAIRES (BILINGUES FR/EN)
+    // =========================================================================
+    const DEFAULT_COURSES = [
+      {
+        id: "wave-optics",
+        simId: "optics",
+        accent: "#0284c7",
+        icon: "🌈",
+        domain: { fr: "Optique Ondulatoire", en: "Wave Optics" },
+        title: { fr: "Optique Ondulatoire", en: "Wave Optics" },
+        summary: {
+          fr: "Interférences, diffraction, lames minces et franges d'égale épaisseur.",
+          en: "Interference, diffraction, thin films, and fringes of equal thickness."
+        },
+        objectives: {
+          fr: [
+            "Établir les conditions de cohérence temporelle et spatiale de deux faisceaux lumineux.",
+            "Calculer la différence de marche optique δ dans une lame mince d'indice n et d'épaisseur e.",
+            "Prévoir les conditions d'interférences constructives et destructives ainsi que le profil d'intensité I(x)."
+          ],
+          en: [
+            "Establish temporal and spatial coherence conditions for two optical beams.",
+            "Calculate the optical path difference δ inside a thin film of refractive index n and thickness e.",
+            "Predict constructive and destructive interference conditions along with the irradiance profile I(x)."
+          ]
+        },
+        equations: [
+          "I(M) = I₁ + I₂ + 2√(I₁I₂)·cos(2πδ / λ₀)",
+          "δ_lame = 2·n·e·cos(r) + λ₀/2   (incidence normale : r = 0)",
+          "Interférences constructives : δ = k·λ₀   (k ∈ ℤ)",
+          "Interférences destructives (antireflet) : e_min = λ₀ / (4·n)"
+        ],
+        theory: {
+          fr: "Lorsqu'une onde lumineuse monochromatique de longueur d'onde λ₀ frappe une lame mince diélectrique d'indice n et d'épaisseur e, elle se divise par réflexion et réfraction sur les deux dioptres. Le déphasage introduit par la réflexion sur un milieu plus réfringent (saut de phase de π, équivalent à λ₀/2) combiné au trajet optique 2ne·cos(r) donne naissance aux franges d'égale inclinaison (anneaux de Haidinger) et d'égale épaisseur (coin d'air, anneaux de Newton).",
+          en: "When a monochromatic light wave of wavelength λ₀ strikes a dielectric thin film of refractive index n and thickness e, it splits via partial reflection and refraction at both interfaces. The π phase jump upon reflection from a higher-index medium (equivalent to λ₀/2) combined with the optical path 2ne·cos(r) produces fringes of equal inclination (Haidinger rings) and equal thickness (air wedge, Newton's rings)."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <rect x="40" y="65" width="380" height="36" fill="#0284c7" fill-opacity="0.28" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="355" y="87" fill="#7dd3fc" font-size="11" font-family="monospace">Lame (n, e)</text>
+          <line x1="80" y1="15" x2="145" y2="65" stroke="#fbbf24" stroke-width="2.5"/>
+          <line x1="145" y1="65" x2="210" y2="15" stroke="#fbbf24" stroke-width="2.2"/>
+          <line x1="145" y1="65" x2="175" y2="101" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="175" y1="101" x2="205" y2="65" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="205" y1="65" x2="270" y2="15" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="4 3"/>
+          <line x1="175" y1="101" x2="225" y2="145" stroke="#34d399" stroke-width="2"/>
+          <text x="195" y="13" fill="#fbbf24" font-size="10" font-family="monospace">Rayon R₁ (Δφ=π)</text>
+          <text x="260" y="30" fill="#38bdf8" font-size="10" font-family="monospace">Rayon R₂</text>
+          <text x="232" y="142" fill="#34d399" font-size="10" font-family="monospace">Transmis T₁</text>
+        </svg>`
+      },
+      {
+        id: "quantum-physics",
+        simId: "quantum",
+        accent: "#7c3aed",
+        icon: "⚛️",
+        domain: { fr: "Physique Quantique", en: "Quantum Physics" },
+        title: { fr: "Physique Quantique", en: "Quantum Physics" },
+        summary: {
+          fr: "Dualité onde-corpuscule, équation de Schrödinger, puits de potentiel infini/fini et effet tunnel.",
+          en: "Wave-particle duality, Schrödinger equation, infinite/finite potential wells, and quantum tunneling."
+        },
+        objectives: {
+          fr: [
+            "Appliquer la relation de de Broglie λ = h/p et les inégalités d'incertitude de Heisenberg.",
+            "Résoudre l'équation de Schrödinger stationnaire dans un puits de potentiel 1D de largeur L.",
+            "Quantifier les niveaux d'énergie E_n et tracer la densité de probabilité de présence |ψ_n(x)|²."
+          ],
+          en: [
+            "Apply the de Broglie relation λ = h/p and Heisenberg's uncertainty principle.",
+            "Solve the time-independent Schrödinger equation inside a 1D potential well of width L.",
+            "Quantize energy eigenvalues E_n and plot the probability density |ψ_n(x)|²."
+          ]
+        },
+        equations: [
+          "λ_dB = h / p ,   Δx · Δp_x ≥ ħ / 2",
+          "- (ħ² / 2m) · (d²ψ / dx²) + V(x)·ψ(x) = E·ψ(x)",
+          "ψ_n(x) = √(2 / L) · sin(n·π·x / L)   (0 ≤ x ≤ L)",
+          "E_n = (n² · π² · ħ²) / (2 · m · L²) = n² · E₁ ,   n ∈ ℕ*"
+        ],
+        theory: {
+          fr: "Le confinement d'une particule quantique de masse m dans un puits de potentiel infini de largeur L impose l'annulation de la fonction d'onde aux parois : ψ(0) = ψ(L) = 0. Cette quantification spatiale entraîne la quantification de l'énergie en niveaux discrets E_n = n²E₁. Contrairement à la mécanique classique, l'état fondamental possède une énergie de point zéro non nulle E₁ > 0, et la probabilité de présence présente (n - 1) nœuds internes.",
+          en: "Confinement of a quantum particle of mass m inside an infinite potential well of width L forces the wavefunction to vanish at the boundaries: ψ(0) = ψ(L) = 0. This boundary condition quantizes the allowed energies into discrete levels E_n = n²E₁. Unlike classical mechanics, the ground state possesses a non-zero zero-point energy E₁ > 0, and the probability density exhibits (n - 1) internal nodes."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <polyline points="75,18 75,130 385,130 385,18" fill="none" stroke="#94a3b8" stroke-width="3.5"/>
+          <line x1="75" y1="102" x2="385" y2="102" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 3"/>
+          <path d="M75,102 Q230,52 385,102" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+          <line x1="75" y1="54" x2="385" y2="54" stroke="#c084fc" stroke-width="1" stroke-dasharray="4 3"/>
+          <path d="M75,54 Q152,18 230,54 Q308,90 385,54" fill="none" stroke="#c084fc" stroke-width="2.5"/>
+          <text x="392" y="105" fill="#38bdf8" font-size="10" font-family="monospace">n=1 (E₁)</text>
+          <text x="392" y="57" fill="#c084fc" font-size="10" font-family="monospace">n=2 (4E₁)</text>
+          <text x="200" y="146" fill="#cbd5e1" font-size="10" font-family="monospace">Largeur L</text>
+        </svg>`
+      },
+      {
+        id: "mechanical-oscillations",
+        simId: "mechanics",
+        accent: "#059669",
+        icon: "🌀",
+        domain: { fr: "Oscillations Mécaniques", en: "Mechanical Oscillations" },
+        title: { fr: "Oscillations Mécaniques", en: "Mechanical Oscillations" },
+        summary: {
+          fr: "Oscillateur harmonique libre, amorti et forcé, résonance et portrait de phase.",
+          en: "Free, damped, and driven harmonic oscillator, resonance, and phase-space portrait."
+        },
+        objectives: {
+          fr: [
+            "Établir l'équation différentielle du mouvement d'un oscillateur masse-ressort amorti et excité.",
+            "Distinguer les régimes pseudo-périodique, critique et apériodique selon le coefficient d'amortissement λ.",
+            "Analyser la trajectoire dans l'espace des phases (x, v = dx/dt) et le phénomène de résonance en amplitude."
+          ],
+          en: [
+            "Derive the differential equation of motion for a damped and driven mass-spring oscillator.",
+            "Distinguish underdamped, critically damped, and overdamped regimes via the damping coefficient λ.",
+            "Analyze trajectories in phase space (x, v = dx/dt) and amplitude resonance."
+          ]
+        },
+        equations: [
+          "m·(d²x/dt²) + α·(dx/dt) + k·x = F₀·cos(Ω·t)",
+          "d²x/dt² + 2·λ·(dx/dt) + ω₀²·x = (F₀/m)·cos(Ω·t)",
+          "ω₀ = √(k / m) ,   λ = α / (2·m) ,   Q = ω₀ / (2·λ)",
+          "X(Ω) = (F₀ / m) / √[(ω₀² - Ω²)² + 4·λ²·Ω²]"
+        ],
+        theory: {
+          fr: "L'oscillateur harmonique amorti et forcé est un modèle universel de la physique. En régime libre (F₀ = 0), la trajectoire dans le plan de phase (x, v) est une ellipse fermée si λ = 0 (conservation de l'énergie mécanique), ou une spirale convergeant vers l'origine (0,0) si λ > 0. En présence d'une excitation sinusoïdale F₀cos(Ωt), le système atteint un régime permanent sinusoïdal présentant un pic de résonance au voisinage de Ω ≈ ω₀ lorsque Q > 1/√2.",
+          en: "The damped, driven harmonic oscillator is a universal prototype in physics. In free motion (F₀ = 0), the phase-space trajectory (x, v) forms a closed ellipse when λ = 0 (energy conservation), or spirals inward toward the origin (0,0) when λ > 0. Under sinusoidal driving F₀cos(Ωt), the system settles into a steady-state oscillation exhibiting a resonance peak near Ω ≈ ω₀ whenever Q > 1/√2."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <line x1="25" y1="25" x2="25" y2="130" stroke="#94a3b8" stroke-width="4"/>
+          <polyline points="25,78 45,78 55,56 70,100 85,56 100,100 115,56 130,100 142,78 165,78" fill="none" stroke="#34d399" stroke-width="2.5"/>
+          <rect x="165" y="54" width="48" height="48" rx="8" fill="#059669" stroke="#e2e8f0" stroke-width="2"/>
+          <text x="183" y="83" fill="#ffffff" font-size="13" font-weight="bold" font-family="monospace">m</text>
+          <ellipse cx="350" cy="78" rx="68" ry="42" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+          <path d="M412,78 C412,102 380,115 350,115 C315,115 292,98 292,78 C292,60 315,48 345,48 C370,48 388,60 388,75" fill="none" stroke="#fbbf24" stroke-width="2.2"/>
+          <text x="302" y="24" fill="#fbbf24" font-size="10" font-family="monospace">Portrait de phase (x, v)</text>
+        </svg>`
+      },
+      {
+        id: "electrical-oscillations",
+        simId: "rlc",
+        accent: "#d97706",
+        icon: "⚡",
+        domain: { fr: "Oscillations Électriques", en: "Electrical Oscillations" },
+        title: { fr: "Oscillations Électriques", en: "Electrical Oscillations" },
+        summary: {
+          fr: "Régimes transitoires et sinusoïdaux du circuit RLC série, facteur de qualité Q et résonance en intensité.",
+          en: "Transient and sinusoidal regimes of the series RLC circuit, quality factor Q, and current resonance."
+        },
+        objectives: {
+          fr: [
+            "Établir l'équation différentielle vérifiée par la tension u_C(t) aux bornes du condensateur.",
+            "Analyser la réponse indicielle (échelon de tension E) et le régime sinusoïdal forcé sur oscilloscope.",
+            "Calculer la fréquence propre f₀, le facteur de qualité Q et l'impédance complexe Z(jω)."
+          ],
+          en: [
+            "Derive the differential equation governing the capacitor voltage u_C(t).",
+            "Analyze both step-voltage transient response and sinusoidal steady-state behavior on an oscilloscope.",
+            "Calculate the resonant frequency f₀, quality factor Q, and complex impedance Z(jω)."
+          ]
+        },
+        equations: [
+          "L·C·(d²u_C/dt²) + R·C·(du_C/dt) + u_C = e(t)",
+          "f₀ = 1 / (2π·√(L·C)) ,   Q = (1/R)·√(L / C)",
+          "Z(jω) = R + j·(L·ω - 1/(C·ω))",
+          "I_max = E / R   à la résonance (ω = ω₀)"
+        ],
+        theory: {
+          fr: "Le dipôle RLC série met en jeu un échange périodique d'énergie entre le champ électrique du condensateur (½Cu_C²) et le champ magnétique de la bobine (½Li²), amorti par dissipation Joule dans la résistance R. En régime sinusoïdal forcé, l'intensité i(t) est maximale et en phase avec la tension d'excitation e(t) lorsque ω = ω₀ = 1/√(LC).",
+          en: "The series RLC circuit involves a periodic exchange of energy between the capacitor's electric field (½Cu_C²) and the inductor's magnetic field (½Li²), damped by Joule dissipation in resistor R. In sinusoidal steady state, current amplitude i(t) reaches its maximum and is in phase with the driving voltage e(t) at resonance ω = ω₀ = 1/√(LC)."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <rect x="55" y="32" width="350" height="92" rx="10" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <circle cx="55" cy="78" r="15" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5"/>
+          <text x="48" y="82" fill="#fbbf24" font-size="11" font-weight="bold">e(t)</text>
+          <rect x="125" y="23" width="58" height="18" fill="#0f172a" stroke="#f43f5e" stroke-width="2"/>
+          <text x="149" y="36" fill="#f43f5e" font-size="11" font-family="monospace">R</text>
+          <path d="M250,32 Q262,12 274,32 Q286,12 298,32 Q310,12 322,32" fill="none" stroke="#34d399" stroke-width="2.5"/>
+          <text x="281" y="16" fill="#34d399" font-size="11" font-family="monospace">L</text>
+          <line x1="393" y1="71" x2="417" y2="71" stroke="#38bdf8" stroke-width="3.2"/>
+          <line x1="393" y1="85" x2="417" y2="85" stroke="#38bdf8" stroke-width="3.2"/>
+          <text x="372" y="82" fill="#38bdf8" font-size="11" font-family="monospace">C</text>
+        </svg>`
+      },
+      {
+        id: "electromagnetism",
+        simId: "rlc",
+        accent: "#e11d48",
+        icon: "🧲",
+        domain: { fr: "Électromagnétisme", en: "Electromagnetism" },
+        title: { fr: "Électromagnétisme", en: "Electromagnetism" },
+        summary: {
+          fr: "Équations de Maxwell, champ magnétique, induction de Faraday et ondes électromagnétiques.",
+          en: "Maxwell's equations, magnetic field, Faraday induction, and electromagnetic waves."
+        },
+        objectives: {
+          fr: [
+            "Maîtriser les quatre équations de Maxwell sous formes locale et intégrale.",
+            "Calculer la force électromotrice induite e = -dΦ_B/dt par la loi de Faraday-Lenz.",
+            "Établir la structure transverse (E, B, k) des ondes électromagnétiques planes dans le vide."
+          ],
+          en: [
+            "Master all four Maxwell equations in both differential and integral forms.",
+            "Compute induced electromotive force e = -dΦ_B/dt using Faraday-Lenz's law.",
+            "Establish the transverse (E, B, k) structure of plane electromagnetic waves in vacuum."
+          ]
+        },
+        equations: [
+          "div(E) = ρ / ε₀  ;   div(B) = 0   (flux magnétique conservatif)",
+          "rot(E) = -∂B / ∂t   (loi locale de Maxwell-Faraday)",
+          "rot(B) = μ₀·j + μ₀ε₀·(∂E / ∂t)   (Maxwell-Ampère)",
+          "ΔE - (1 / c²)·(∂²E / ∂t²) = 0 ,   c = 1 / √(ε₀·μ₀)"
+        ],
+        theory: {
+          fr: "Les équations de Maxwell constituent la synthèse complète de l'électromagnétisme classique. Tout flux magnétique variable à travers un circuit fermé génère une force électromotrice induite s'opposant à la cause qui lui donne naissance (loi de Lenz). Dans le vide sans charges ni courants, le couplage entre ∂B/∂t et ∂E/∂t donne naissance aux ondes électromagnétiques se propageant à la vitesse c ≈ 3×10⁸ m/s.",
+          en: "Maxwell's equations form the complete foundation of classical electromagnetism. Any time-varying magnetic flux through a closed loop induces an electromotive force opposing the flux change (Lenz's law). In charge- and current-free vacuum, mutual coupling between ∂B/∂t and ∂E/∂t sustains electromagnetic waves traveling at speed c ≈ 3×10⁸ m/s."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <line x1="30" y1="78" x2="430" y2="78" stroke="#94a3b8" stroke-width="1.5"/>
+          <path d="M45,78 Q90,15 135,78 T225,78 T315,78 T405,78" fill="none" stroke="#f43f5e" stroke-width="2.5"/>
+          <path d="M45,78 Q90,122 135,78 T225,78 T315,78 T405,78" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+          <text x="72" y="25" fill="#f43f5e" font-size="11" font-family="monospace">Champ Électrique E</text>
+          <text x="72" y="135" fill="#38bdf8" font-size="11" font-family="monospace">Champ Magnétique B</text>
+          <text x="392" y="66" fill="#e2e8f0" font-size="11" font-family="monospace">c →</text>
+        </svg>`
+      },
+      {
+        id: "waves-propagation",
+        simId: "optics",
+        accent: "#2563eb",
+        icon: "〰️",
+        domain: { fr: "Ondes & Propagation", en: "Waves & Propagation" },
+        title: { fr: "Ondes & Propagation", en: "Waves & Propagation" },
+        summary: {
+          fr: "Équation de d'Alembert, ondes progressives, ondes stationnaires et dispersion.",
+          en: "D'Alembert wave equation, traveling waves, standing waves, and dispersion."
+        },
+        objectives: {
+          fr: [
+            "Résoudre l'équation d'onde unidimensionnelle de d'Alembert et identifier la célérité c.",
+            "Superposer deux ondes progressives contrapropagatives pour obtenir une onde stationnaire.",
+            "Distinguer vitesse de phase v_φ = ω/k et vitesse de groupe v_g = dω/dk dans un milieu dispersif."
+          ],
+          en: [
+            "Solve the 1D d'Alembert wave equation and identify wave speed c.",
+            "Superpose two counter-propagating waves to obtain a standing wave.",
+            "Distinguish phase velocity v_φ = ω/k and group velocity v_g = dω/dk in dispersive media."
+          ]
+        },
+        equations: [
+          "∂²y/∂x² - (1 / c²)·(∂²y/∂t²) = 0",
+          "y_prog(x,t) = A·cos(ω·t - k·x + φ₀)",
+          "y_stat(x,t) = 2A·cos(k·x)·cos(ω·t)",
+          "v_φ = ω / k ,   v_g = dω / dk"
+        ],
+        theory: {
+          fr: "Une onde progressive transporte de l'énergie sans transport de matière. Lorsque deux ondes harmoniques de même fréquence et même amplitude se propagent en sens opposés, leur superposition crée une onde stationnaire caractérisée par des nœuds fixes (amplitude nulle) séparés de λ/2 et des ventres de vibration.",
+          en: "A traveling wave transports energy without net transport of matter. When two harmonic waves of identical frequency and amplitude propagate in opposite directions, their superposition produces a standing wave characterized by stationary nodes (zero amplitude) spaced by λ/2 and antinodes of maximum oscillation."
+        },
+        svgDiagram: `<svg viewBox="0 0 460 155" class="w-full h-40 bg-slate-900 rounded-xl p-2">
+          <circle cx="50" cy="78" r="4.5" fill="#e2e8f0"/>
+          <circle cx="410" cy="78" r="4.5" fill="#e2e8f0"/>
+          <path d="M50,78 Q140,14 230,78 Q320,142 410,78" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+          <path d="M50,78 Q140,142 230,78 Q320,14 410,78" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <circle cx="230" cy="78" r="4.5" fill="#f43f5e"/>
+          <text x="208" y="102" fill="#f43f5e" font-size="10" font-family="monospace">Nœud (λ/2)</text>
+          <text x="115" y="24" fill="#38bdf8" font-size="10" font-family="monospace">Onde stationnaire (n=2)</text>
+        </svg>`
+      }
+    ];
+
+    // =========================================================================
+    // 3. DONNÉES DES EXERCICES DIRIGÉS & QCM (6 QUESTIONS BILINGUES)
+    // =========================================================================
+    const EXERCISES_LIST = [
+      {
+        id: "ex-opt",
+        topic: { fr: "Optique Ondulatoire", en: "Wave Optics" },
+        level: { fr: "Niveau L1/L2 • Lame mince", en: "BSc Year 1/2 • Thin Film" },
+        title: {
+          fr: "Problème 1 : Couche antireflet en fluorure de magnésium (MgF₂)",
+          en: "Problem 1: Anti-Reflective Magnesium Fluoride (MgF₂) Thin Film"
+        },
+        statement: {
+          fr: "On dépose sur un verre d'indice n_verre = 1,50 une lame mince de MgF₂ d'indice n = 1,38. L'ensemble est éclairé sous incidence normale par une lumière verte de longueur d'onde dans le vide λ₀ = 552 nm. Déterminer l'épaisseur minimale non nulle e_min annulant la réflexion.",
+          en: "A thin layer of MgF₂ (refractive index n = 1.38) is coated onto glass (n_glass = 1.50). Illuminated at normal incidence by green light of vacuum wavelength λ₀ = 552 nm, find the minimum non-zero film thickness e_min that suppresses reflection."
+        },
+        hint: {
+          fr: "Comme n_air = 1 < 1,38 < 1,50, les deux réflexions subissent chacune un saut de phase de π : la différence de marche vaut simplement δ = 2·n·e.",
+          en: "Since n_air = 1 < 1.38 < 1.50, both reflections experience identical π phase jumps; thus the optical path difference is simply δ = 2·n·e."
+        },
+        solution: {
+          fr: "1. Les deux réflexions ayant lieu sur un milieu d'indice supérieur (1 → 1,38 puis 1,38 → 1,50), leurs déphasages de π se compensent.\n2. Différence de marche optique : δ = 2·n·e.\n3. Interférences destructives : δ = (2k + 1)·(λ₀ / 2). Pour k = 0 (épaisseur minimale) : 2·n·e_min = λ₀ / 2.\n4. Application numérique : e_min = λ₀ / (4·n) = 552 / (4 × 1,38) = 100,0 nm.",
+          en: "1. Both reflections occur at higher-index boundaries (1 → 1.38 and 1.38 → 1.50), so their π phase shifts cancel.\n2. Optical path difference: δ = 2·n·e.\n3. Destructive interference: δ = (2k + 1)·(λ₀ / 2). For k = 0 (minimum thickness): 2·n·e_min = λ₀ / 2.\n4. Calculation: e_min = λ₀ / (4·n) = 552 / (4 × 1.38) = 100.0 nm."
+        }
+      },
+      {
+        id: "ex-quant",
+        topic: { fr: "Physique Quantique", en: "Quantum Physics" },
+        level: { fr: "Niveau L2 • Puits infini", en: "BSc Year 2 • Infinite Well" },
+        title: {
+          fr: "Problème 2 : Quantification de l'énergie dans un puits quantique 1D",
+          en: "Problem 2: Energy Quantization in a 1D Quantum Potential Well"
+        },
+        statement: {
+          fr: "Un électron (m = 9,11 × 10⁻³¹ kg) est confiné dans un puits de potentiel infini de largeur L = 0,80 nm. Calculer en eV les énergies E₁ et E₂ des deux premiers niveaux, ainsi que la longueur d'onde λ du photon émis lors de la transition n = 2 → n = 1.",
+          en: "An electron (m = 9.11 × 10⁻³¹ kg) is confined inside a 1D infinite square well of width L = 0.80 nm. Calculate in eV the energies E₁ and E₂ of the first two levels, and the wavelength λ of the photon emitted during the n = 2 → n = 1 transition."
+        },
+        hint: {
+          fr: "Utilisez E_n = (n²·h²) / (8·m·L²) avec h = 6,626 × 10⁻³⁴ J·s et 1 eV = 1,602 × 10⁻¹⁹ J.",
+          en: "Use E_n = (n²·h²) / (8·m·L²) with h = 6.626 × 10⁻³⁴ J·s and 1 eV = 1.602 × 10⁻¹⁹ J."
+        },
+        solution: {
+          fr: "1. E₁ = h² / (8·m·L²) = (6,626×10⁻³⁴)² / (8 × 9,11×10⁻³¹ × (0,80×10⁻⁹)²) ≈ 9,41 × 10⁻²⁰ J ≈ 0,587 eV.\n2. E₂ = 4·E₁ ≈ 2,35 eV.\n3. Énergie du photon émis : ΔE = E₂ - E₁ = 3·E₁ ≈ 1,76 eV.\n4. Longueur d'onde : λ = h·c / ΔE ≈ 1240 / 1,76 ≈ 704 nm (lumière rouge).",
+          en: "1. E₁ = h² / (8·m·L²) = (6.626×10⁻³⁴)² / (8 × 9.11×10⁻³¹ × (0.80×10⁻⁹)²) ≈ 9.41 × 10⁻²⁰ J ≈ 0.587 eV.\n2. E₂ = 4·E₁ ≈ 2.35 eV.\n3. Emitted photon energy: ΔE = E₂ - E₁ = 3·E₁ ≈ 1.76 eV.\n4. Wavelength: λ = h·c / ΔE ≈ 1240 / 1.76 ≈ 704 nm (red light)."
+        }
+      },
+      {
+        id: "ex-rlc",
+        topic: { fr: "Oscillations Électriques", en: "Electrical Oscillations" },
+        level: { fr: "Niveau L1 • Circuit RLC", en: "BSc Year 1 • RLC Circuit" },
+        title: {
+          fr: "Problème 3 : Résonance et bande passante d'un filtre RLC série",
+          en: "Problem 3: Resonance and Bandwidth of a Series RLC Filter"
+        },
+        statement: {
+          fr: "Un circuit RLC série est constitué d'une résistance R = 20 Ω, d'une bobine L = 50 mH et d'un condensateur C = 2,0 µF, alimenté par un GBF délivrant E = 5,0 V. Calculer la fréquence de résonance f₀, le facteur de qualité Q et l'intensité efficace à la résonance.",
+          en: "A series RLC circuit comprises a resistor R = 20 Ω, an inductor L = 50 mH, and a capacitor C = 2.0 µF driven by an AC source of RMS voltage E = 5.0 V. Compute the resonant frequency f₀, quality factor Q, and RMS current at resonance."
+        },
+        hint: {
+          fr: "f₀ = 1 / (2π√(LC)), Q = (1/R)√(L/C), et à la résonance Z = R.",
+          en: "f₀ = 1 / (2π√(LC)), Q = (1/R)√(L/C), and at resonance Z = R."
+        },
+        solution: {
+          fr: "1. Pulsation propre : ω₀ = 1 / √(0,050 × 2,0×10⁻⁶) = 1 / √(10⁻⁷) ≈ 3162,3 rad/s.\n2. Fréquence propre : f₀ = ω₀ / (2π) ≈ 503,3 Hz.\n3. Facteur de qualité : Q = (1/20)·√(0,050 / 2,0×10⁻⁶) = 0,05 × √25000 ≈ 7,91.\n4. Intensité efficace à la résonance : I₀ = E / R = 5,0 / 20 = 0,25 A (250 mA).",
+          en: "1. Natural angular frequency: ω₀ = 1 / √(0.050 × 2.0×10⁻⁶) = 1 / √(10⁻⁷) ≈ 3162.3 rad/s.\n2. Resonant frequency: f₀ = ω₀ / (2π) ≈ 503.3 Hz.\n3. Quality factor: Q = (1/20)·√(0.050 / 2.0×10⁻⁶) = 0.05 × √25000 ≈ 7.91.\n4. RMS current at resonance: I₀ = E / R = 5.0 / 20 = 0.25 A (250 mA)."
+        }
+      },
+      {
+        id: "ex-meca",
+        topic: { fr: "Oscillations Mécaniques", en: "Mechanical Oscillations" },
+        level: { fr: "Niveau L1 • Oscillateur amorti", en: "BSc Year 1 • Damped Oscillator" },
+        title: {
+          fr: "Problème 4 : Décrément logarithmique et amortissement d'un ressort",
+          en: "Problem 4: Logarithmic Decrement and Damping of a Spring Oscillator"
+        },
+        statement: {
+          fr: "Un solide de masse m = 400 g fixé à un ressort de raideur k = 40 N/m oscille avec un léger amortissement visqueux. On observe que l'amplitude est divisée par e ≈ 2,718 au bout de 4 pseudo-périodes. Déterminer la pulsation propre ω₀, le facteur de qualité Q et le coefficient de frottement α.",
+          en: "A mass m = 400 g attached to a spring of stiffness k = 40 N/m oscillates with light viscous damping. Its amplitude decays by a factor of e ≈ 2.718 after 4 periods. Determine the natural frequency ω₀, quality factor Q, and damping coefficient α."
+        },
+        hint: {
+          fr: "δ = (1/N)·ln(X₀ / X_N) avec N = 4 et ln(e) = 1. Pour un faible amortissement, Q ≈ π / δ et α = m·ω₀ / Q.",
+          en: "δ = (1/N)·ln(X₀ / X_N) with N = 4 and ln(e) = 1. For light damping, Q ≈ π / δ and α = m·ω₀ / Q."
+        },
+        solution: {
+          fr: "1. Pulsation propre : ω₀ = √(k / m) = √(40 / 0,40) = 10,0 rad/s.\n2. Décrément logarithmique : δ = (1/4)·ln(e) = 0,25.\n3. Facteur de qualité : Q ≈ π / 0,25 ≈ 12,57.\n4. Coefficient de frottement : α = m·ω₀ / Q = (0,40 × 10,0) / 12,57 ≈ 0,318 kg/s.",
+          en: "1. Natural angular frequency: ω₀ = √(k / m) = √(40 / 0.40) = 10.0 rad/s.\n2. Logarithmic decrement: δ = (1/4)·ln(e) = 0.25.\n3. Quality factor: Q ≈ π / 0.25 ≈ 12.57.\n4. Damping coefficient: α = m·ω₀ / Q = (0.40 × 10.0) / 12.57 ≈ 0.318 kg/s."
+        }
+      }
+    ];
+
+    const QUIZ_DATA = [
+      {
+        q: {
+          fr: "1. Dans une lame mince d'indice n et d'épaisseur e éclairée sous incidence normale, la différence de marche géométrique aller-retour vaut :",
+          en: "1. Inside a thin film of index n and thickness e at normal incidence, the round-trip optical path length is:"
+        },
+        options: {
+          fr: ["n · e", "2 · n · e", "e / (2 · n)", "n · e²"],
+          en: ["n · e", "2 · n · e", "e / (2 · n)", "n · e²"]
+        },
+        correct: 1,
+        explanation: {
+          fr: "La lumière traverse deux fois l'épaisseur e dans un milieu d'indice n, parcourant un chemin optique de 2·n·e.",
+          en: "Light traverses the thickness e twice inside a medium of index n, covering an optical path of 2·n·e."
+        }
+      },
+      {
+        q: {
+          fr: "2. Dans un puits de potentiel quantique infini 1D, combien de nœuds internes possède la fonction d'onde ψ₃(x) (état n = 3) ?",
+          en: "2. In a 1D infinite quantum well, how many internal nodes does the wavefunction ψ₃(x) (state n = 3) have?"
+        },
+        options: {
+          fr: ["0 nœud", "1 nœud", "2 nœuds", "3 nœuds"],
+          en: ["0 nodes", "1 node", "2 nodes", "3 nodes"]
+        },
+        correct: 2,
+        explanation: {
+          fr: "La fonction ψ_n(x) ∝ sin(nπx/L) possède toujours (n - 1) zéros strictement à l'intérieur du puits, soit 2 nœuds pour n = 3.",
+          en: "The eigenfunction ψ_n(x) ∝ sin(nπx/L) always has (n - 1) zeros strictly inside the well, i.e., 2 nodes for n = 3."
+        }
+      },
+      {
+        q: {
+          fr: "3. Dans le plan de phase (x, v), la trajectoire d'un oscillateur harmonique libre non amorti (λ = 0) est :",
+          en: "3. In the phase plane (x, v), the trajectory of an undamped free harmonic oscillator (λ = 0) is:"
+        },
+        options: {
+          fr: ["Une droite passant par l'origine", "Une ellipse fermée centrée en (0,0)", "Une parabole", "Une spirale divergente"],
+          en: ["A straight line through the origin", "A closed ellipse centered at (0,0)", "A parabola", "A diverging spiral"]
+        },
+        correct: 1,
+        explanation: {
+          fr: "La conservation de l'énergie ½kx² + ½mv² = E_m définit l'équation cartésienne d'une ellipse fermée dans le plan (x, v).",
+          en: "Conservation of energy ½kx² + ½mv² = E_m defines a closed ellipse in the (x, v) phase plane."
+        }
+      },
+      {
+        q: {
+          fr: "4. À la résonance en intensité d'un circuit RLC série alimenté par une tension sinusoïdale, l'impédance équivalente Z vaut :",
+          en: "4. At current resonance of a series RLC circuit driven by an AC source, the equivalent impedance Z equals:"
+        },
+        options: {
+          fr: ["Z = 0", "Z = R", "Z = L·ω₀", "Z = R + L·ω₀"],
+          en: ["Z = 0", "Z = R", "Z = L·ω₀", "Z = R + L·ω₀"]
+        },
+        correct: 1,
+        explanation: {
+          fr: "À ω = ω₀ = 1/√(LC), les réactances inductive Lω₀ et capacitive 1/(Cω₀) se compensent exactement : Z = R.",
+          en: "At ω = ω₀ = 1/√(LC), inductive reactance Lω₀ and capacitive reactance 1/(Cω₀) cancel out: Z = R."
+        }
+      },
+      {
+        q: {
+          fr: "5. Quelle relation relie la célérité c des ondes électromagnétiques dans le vide aux constantes ε₀ et μ₀ ?",
+          en: "5. Which relation connects the vacuum speed of electromagnetic waves c to the constants ε₀ and μ₀?"
+        },
+        options: {
+          fr: ["c = ε₀ · μ₀", "c = √(ε₀ / μ₀)", "c = 1 / √(ε₀ · μ₀)", "c = 1 / (ε₀ · μ₀)"],
+          en: ["c = ε₀ · μ₀", "c = √(ε₀ / μ₀)", "c = 1 / √(ε₀ · μ₀)", "c = 1 / (ε₀ · μ₀)"]
+        },
+        correct: 2,
+        explanation: {
+          fr: "L'équation de d'Alembert issue des équations de Maxwell donne c = 1 / √(ε₀·μ₀) ≈ 2,998 × 10⁸ m/s.",
+          en: "The d'Alembert wave equation derived from Maxwell's equations yields c = 1 / √(ε₀·μ₀) ≈ 2.998 × 10⁸ m/s."
+        }
+      },
+      {
+        q: {
+          fr: "6. Dans une onde stationnaire sur une corde fixée aux deux extrémités, la distance séparant deux nœuds consécutifs est égale à :",
+          en: "6. In a standing wave on a string fixed at both ends, the distance between two consecutive nodes equals:"
+        },
+        options: {
+          fr: ["λ / 4", "λ / 2", "λ", "2 · λ"],
+          en: ["λ / 4", "λ / 2", "λ", "2 · λ"]
+        },
+        correct: 1,
+        explanation: {
+          fr: "La fonction spatiale cos(kx) s'annule tous les Δx = π/k = λ/2.",
+          en: "The spatial envelope cos(kx) vanishes every Δx = π/k = λ/2."
+        }
+      }
+    ];
+
+    // =========================================================================
+    // 4. RESSOURCES INTÉGRÉES TÉLÉCHARGEABLES / IMPRIMABLES
+    // =========================================================================
+    const BUILTIN_RESOURCES = [
+      {
+        id: "res-formulaire",
+        badge: "PDF / HTML",
+        title: {
+          fr: "Formulaire Universitaire : Optique & Quantique",
+          en: "University Formula Sheet: Wave Optics & Quantum"
+        },
+        desc: {
+          fr: "Synthèse complète des relations d'interférences, lames minces, diffraction, Schrödinger et puits de potentiel.",
+          en: "Complete summary of interference relations, thin films, diffraction, Schrödinger equation, and potential wells."
+        },
+        filename: "Formulaire_Optique_Quantique_Prof_Chouket.txt",
+        content: `======================================================================
+AHMED CHOUKET GENERAL PHYSICS COURSES FOR UNIVERSITY
+Formulaire Universitaire : Optique Ondulatoire & Physique Quantique
+Prof. Ahmed Chouket • IPEI El Manar / Université de Tunis El Manar
+======================================================================
+
+1. OPTIQUE ONDULATOIRE (WAVE OPTICS)
+- Intensité de deux ondes cohérentes : I = I1 + I2 + 2*sqrt(I1*I2)*cos(2*pi*delta / lambda_0)
+- Interfrange des fentes d'Young : i = (lambda_0 * D) / a
+- Différence de marche lame mince (incidence normale) : delta = 2 * n * e + lambda_0 / 2
+- Condition antireflet (épaisseur minimale) : e_min = lambda_0 / (4 * n)
+- Diffraction fente simple de largeur b : I(theta) = I0 * [sin(beta)/beta]^2, beta = (pi*b*sin(theta))/lambda_0
+
+2. PHYSIQUE QUANTIQUE (QUANTUM PHYSICS)
+- Longueur d'onde de de Broglie : lambda = h / p
+- Inégalité de Heisenberg : Delta_x * Delta_px >= h_bar / 2
+- Équation de Schrödinger stationnaire : -(h_bar^2 / 2m) d^2(psi)/dx^2 + V(x)*psi = E*psi
+- Puits infini 1D de largeur L :
+    psi_n(x) = sqrt(2/L) * sin(n * pi * x / L)
+    E_n = (n^2 * pi^2 * h_bar^2) / (2 * m * L^2) = n^2 * E_1
+`
+      },
+      {
+        id: "res-python",
+        badge: "Python (.py)",
+        title: {
+          fr: "Script Python : Analyse de Franges d'Interférence",
+          en: "Python Script: Optical Interference Fringe Analysis"
+        },
+        desc: {
+          fr: "Code NumPy / Matplotlib prêt à exécuter en TP pour tracer I(x) et déterminer l'interfrange.",
+          en: "Ready-to-run NumPy / Matplotlib lab script to plot I(x) and extract fringe spacing."
+        },
+        filename: "analyse_interferences_prof_chouket.py",
+        content: `# -*- coding: utf-8 -*-
+"""
+Ahmed Chouket General Physics Courses for University
+TP Optique Ondulatoire : Simulation et analyse des franges d'interférence
+Prof. Ahmed Chouket - IPEI El Manar
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Paramètres expérimentaux (SI)
+lambda_0 = 589e-9   # Longueur d'onde lampe Sodium (m)
+a = 0.5e-3          # Écartement des fentes (m)
+D = 1.50            # Distance fentes-écran (m)
+I0 = 1.0            # Intensité unitaire
+
+# Axe de l'écran x (de -5 mm à +5 mm)
+x = np.linspace(-5e-3, 5e-3, 2000)
+delta = (a * x) / D
+I = 2 * I0 * (1 + np.cos(2 * np.pi * delta / lambda_0))
+
+interfrange_mm = (lambda_0 * D / a) * 1e3
+print(f"Interfrange théorique i = {interfrange_mm:.3f} mm")
+
+plt.figure(figsize=(9, 4))
+plt.plot(x * 1e3, I, color="#1362a7", lw=2, label="I(x) théorique")
+plt.title("Profil d'intensité des interférences d'Young (Prof. Ahmed Chouket)")
+plt.xlabel("Position sur l'écran x (mm)")
+plt.ylabel("Intensité normalisée I / I0")
+plt.grid(True, alpha=0.3)
+plt.legend()
+plt.tight_layout()
+plt.show()
+`
+      },
+      {
+        id: "res-tp-rlc",
+        badge: "Protocole TP",
+        title: {
+          fr: "Protocole de TP : Circuit RLC Série & Résonance",
+          en: "Lab Protocol: Series RLC Circuit & Resonance"
+        },
+        desc: {
+          fr: "Mode opératoire détaillé pour l'étude à l'oscilloscope des régimes transitoire et sinusoïdal.",
+          en: "Step-by-step experimental procedure for oscilloscope study of transient and sinusoidal regimes."
+        },
+        filename: "Protocole_TP_RLC_Prof_Chouket.txt",
+        content: `======================================================================
+PROTOCOLE DE TRAVAUX PRATIQUES : CIRCUIT RLC SÉRIE
+Ahmed Chouket General Physics Courses for University
+======================================================================
+
+OBJECTIFS :
+1. Observer les trois régimes transitoires (pseudo-périodique, critique, apériodique).
+2. Mesurer la pseudo-période T et le décrément logarithmique delta.
+3. Tracer la courbe de résonance en intensité I(f) et déduire Q = f0 / Delta_f.
+
+MATÉRIEL :
+- GBF (signal carré 100 Hz pour le transitoire, sinusoïdal variable pour la résonance)
+- Boîte de résistances variables R (10 Ohm à 1 kOhm)
+- Inductance L = 50 mH, Condensateur C = 2.0 uF
+- Oscilloscope numérique double voie (Voie 1 : u_GBF, Voie 2 : u_C ou u_R)
+
+MANIPULATIONS :
+Étape 1 : Régler R = 20 Ohm. Observer les oscillations amorties de u_C(t).
+Étape 2 : Augmenter R jusqu'à R_c = 2*sqrt(L/C) ≈ 316 Ohm pour atteindre le régime critique.
+Étape 3 : Passer en mode sinusoïdal et relever U_R_max(f) autour de f0 ≈ 503 Hz.
+`
+      }
+    ];
+
+    // =========================================================================
+    // 5. ÉTAT GLOBAL DE L'APPLICATION & PERSISTANCE
+    // =========================================================================
+    const STORAGE_KEY = "ahmed_chouket_univ_physics_v1";
+
+    let appState = {
+      lang: "fr",
+      activeTab: "accueil",
+      activeSim: "optics",
+      customCourses: [],
+      uploadedFiles: []
+    };
+
+    let quizAnswers = {};
+    let activeExerciseFilter = "ALL";
+
+    // Chargement depuis script embarqué (si fichier téléchargé) ou localStorage
+    function loadSavedState() {
+      try {
+        const embeddedTag = document.getElementById("embedded-platform-data");
+        if (embeddedTag && embeddedTag.textContent && embeddedTag.textContent.trim() !== "null") {
+          const parsedEmbedded = JSON.parse(embeddedTag.textContent);
+          if (parsedEmbedded && typeof parsedEmbedded === "object") {
+            appState = { ...appState, ...parsedEmbedded };
+          }
+        }
+        const localRaw = localStorage.getItem(STORAGE_KEY);
+        if (localRaw) {
+          const parsedLocal = JSON.parse(localRaw);
+          appState = {
+            ...appState,
+            ...parsedLocal,
+            customCourses: Array.isArray(parsedLocal.customCourses) ? parsedLocal.customCourses : appState.customCourses,
+            uploadedFiles: Array.isArray(parsedLocal.uploadedFiles) ? parsedLocal.uploadedFiles : appState.uploadedFiles
+          };
+        }
+      } catch (err) {
+        console.warn("Initialisation avec état par défaut :", err);
+      }
+    }
+
+    function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        showToast("⚠️ Espace localStorage limité : pensez à télécharger le fichier HTML pour sauvegarder.", "⚠️");
+      }
+    }
+
+    function showToast(msg, icon = "✅") {
+      const toast = document.getElementById("toastAlert");
+      document.getElementById("toastIcon").textContent = icon;
+      document.getElementById("toastText").textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.add("hidden"), 4000);
+    }
+
+    // =========================================================================
+    // 6. BASCULE BILINGUE INSTANTANÉE [FR | EN]
+    // =========================================================================
+    function setLanguage(lang) {
+      appState.lang = lang === "en" ? "en" : "fr";
+      document.documentElement.lang = appState.lang;
+      persistState();
+
+      // Mise à jour boutons [FR | EN]
+      const btnFr = document.getElementById("btnLangFR");
+      const btnEn = document.getElementById("btnLangEN");
+      if (appState.lang === "fr") {
+        btnFr.className = "px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition bg-white text-[#0f3564] shadow";
+        btnEn.className = "px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition text-blue-200 hover:text-white";
+      } else {
+        btnEn.className = "px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition bg-white text-[#0f3564] shadow";
+        btnFr.className = "px-3 py-1.5 rounded-lg text-xs font-extrabold tracking-wide transition text-blue-200 hover:text-white";
+      }
+
+      const dict = TRANSLATIONS[appState.lang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      document.getElementById("mainSubtitle").textContent = dict.subtitle;
+      document.getElementById("footerMottoText").textContent = dict.motto;
+      document.getElementById("courseFilterInput").placeholder = dict.searchPlaceholder;
+
+      // Re-rendre les vues dynamiques
+      renderCoursesGrid();
+      renderHomeLabQuickCards();
+      renderSimulatorUI();
+      renderExercisesView();
+      renderQuiz();
+      renderResourcesView();
+    }
+
+    // =========================================================================
+    // 7. NAVIGATION ENTRE ONGLETS
+    // =========================================================================
+    function navigateTo(tab) {
+      appState.activeTab = tab;
+      persistState();
+
+      // Style des boutons de navigation
+      document.querySelectorAll(".nav-tab").forEach(btn => {
+        const isCurrent = btn.getAttribute("data-nav") === tab;
+        btn.className = isCurrent
+          ? "nav-tab px-4 py-2 rounded-xl transition bg-white text-[#0f3564] shadow-sm"
+          : "nav-tab px-4 py-2 rounded-xl transition text-blue-100 hover:bg-white/15 hover:text-white";
+      });
+
+      // Afficher Hero uniquement sur Accueil
+      document.getElementById("heroSection").classList.toggle("hidden", tab !== "accueil");
+      document.getElementById("homeLabPreviewBlock").classList.toggle("hidden", tab !== "accueil");
+
+      // Afficher la section correspondante
+      document.getElementById("section-cours").classList.toggle("hidden", tab !== "accueil" && tab !== "cours");
+      document.getElementById("section-laboratoire").classList.toggle("hidden", tab !== "laboratoire");
+      document.getElementById("section-exercices").classList.toggle("hidden", tab !== "exercices");
+      document.getElementById("section-ressources").classList.toggle("hidden", tab !== "ressources");
+      document.getElementById("section-apropos").classList.toggle("hidden", tab !== "apropos");
+
+      if (tab === "laboratoire") {
+        setTimeout(resizePhysicsCanvas, 40);
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openUploadAndImport() {
+      navigateTo("ressources");
+      setTimeout(() => {
+        document.getElementById("dropZoneBox")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
+    }
+
+    // =========================================================================
+    // 8. RENDU DES MODULES DE COURS & MODALE DÉTAILLÉE
+    // =========================================================================
+    function getAllCourses() {
+      return [...DEFAULT_COURSES, ...appState.customCourses];
+    }
+
+    function renderCoursesGrid() {
+      const lang = appState.lang;
+      const dict = TRANSLATIONS[lang];
+      const query = (document.getElementById("courseFilterInput").value || "").trim().toLowerCase();
+      const grid = document.getElementById("coursesCardsGrid");
+
+      const filtered = getAllCourses().filter(c => {
+        const title = (c.title[lang] || c.title.fr).toLowerCase();
+        const domain = (c.domain[lang] || c.domain.fr).toLowerCase();
+        const summary = (c.summary[lang] || c.summary.fr).toLowerCase();
+        return !query || title.includes(query) || domain.includes(query) || summary.includes(query);
+      });
+
+      grid.innerHTML = filtered.map(c => {
+        const title = c.title[lang] || c.title.fr;
+        const domain = c.domain[lang] || c.domain.fr;
+        const summary = c.summary[lang] || c.summary.fr;
+        const accent = c.accent || "#1362a7";
+
+        return `
+          <article onclick="openCourseModal('${c.id}')"
+            style="border-left: 5px solid ${accent};"
+            class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg border border-slate-200/80 transition-all duration-200 cursor-pointer flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">
+                  <span>${c.icon || "📘"}</span>
+                  <span>${domain}</span>
+                </span>
+                ${c.isCustom ? `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">${dict.customTag}</span>` : ""}
+              </div>
+              <h4 class="text-lg sm:text-xl font-extrabold text-[#0f3564] group-hover:text-[#1362a7] transition mb-2">
+                ${title}
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                ${summary}
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs font-mono text-slate-400 truncate max-w-[60%]">${c.equations[0] || ""}</span>
+              <span class="text-xs sm:text-sm font-bold text-[#1362a7] group-hover:translate-x-1 transition-transform">
+                ${dict.openCardBtn}
+              </span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function openCourseModal(courseId) {
+      const course = getAllCourses().find(c => c.id === courseId);
+      if (!course) return;
+
+      const lang = appState.lang;
+      const dict = TRANSLATIONS[lang];
+
+      document.getElementById("modalCourseDomain").textContent = course.domain[lang] || course.domain.fr;
+      document.getElementById("modalCourseHeading").textContent = course.title[lang] || course.title.fr;
+
+      const objectives = (course.objectives && (course.objectives[lang] || course.objectives.fr)) || [];
+      const theory = course.theory[lang] || course.theory.fr;
+
+      document.getElementById("modalCourseContent").innerHTML = `
+        ${objectives.length ? `
+          <div>
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">${dict.objectivesSectionTitle}</h4>
+            <ul class="list-disc pl-5 space-y-1 text-sm text-slate-700">
+              ${objectives.map(obj => `<li>${obj}</li>`).join("")}
+            </ul>
+          </div>
+        ` : ""}
+
+        <div>
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">${dict.eqSectionTitle}</h4>
+          <div class="space-y-2">
+            ${course.equations.map(eq => `<div class="formula-box">${eq}</div>`).join("")}
+          </div>
+        </div>
+
+        ${course.svgDiagram ? `
+          <div>
+            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">${dict.schemaSectionTitle}</h4>
+            ${course.svgDiagram}
+          </div>
+        ` : ""}
+
+        <div>
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">${dict.theorySectionTitle}</h4>
+          <p class="text-sm sm:text-base text-slate-700 leading-relaxed">${theory}</p>
+        </div>
+      `;
+
+      const simBtn = document.getElementById("modalOpenSimBtn");
+      simBtn.onclick = () => {
+        closeCourseModal();
+        navigateTo("laboratoire");
+        selectSimulator(course.simId || "optics");
+      };
+
+      const modal = document.getElementById("courseDetailModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeCourseModal() {
+      const modal = document.getElementById("courseDetailModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function renderHomeLabQuickCards() {
+      const lang = appState.lang;
+      const cards = [
+        {
+          sim: "optics",
+          icon: "🌈",
+          title: lang === "fr" ? "Banc 1 : Interférences & Lame Mince" : "Bench 1: Interference & Thin Film",
+          desc: lang === "fr" ? "λ (400–700 nm), indice n, épaisseur e, profil I(x)" : "λ (400–700 nm), index n, thickness e, profile I(x)"
+        },
+        {
+          sim: "mechanics",
+          icon: "🌀",
+          title: lang === "fr" ? "Banc 2 : Oscillateur & Phase" : "Bench 2: Oscillator & Phase Space",
+          desc: lang === "fr" ? "Ressort animé, x(t) et portrait de phase (x, v)" : "Animated spring, x(t), and phase portrait (x, v)"
+        },
+        {
+          sim: "rlc",
+          icon: "⚡",
+          title: lang === "fr" ? "Banc 3 : Circuit RLC & Oscilloscope" : "Bench 3: Series RLC & Oscilloscope",
+          desc: lang === "fr" ? "Double voie u_C(t) & i(t), mode échelon ou AC" : "Dual-trace u_C(t) & i(t), step or AC mode"
+        },
+        {
+          sim: "quantum",
+          icon: "⚛️",
+          title: lang === "fr" ? "Banc 4 : Puits Quantique" : "Bench 4: Quantum Potential Well",
+          desc: lang === "fr" ? "Fonction d'onde ψ_n(x), |ψ_n(x)|² et niveaux E_n" : "Wavefunction ψ_n(x), |ψ_n(x)|², and levels E_n"
+        }
+      ];
+
+      document.getElementById("homeLabQuickCards").innerHTML = cards.map(c => `
+        <button onclick="navigateTo('laboratoire'); selectSimulator('${c.sim}')"
+          class="text-left bg-white hover:bg-blue-50/70 rounded-2xl p-4 border border-slate-200 hover:border-[#1362a7] shadow-xs transition group">
+          <div class="text-2xl mb-2">${c.icon}</div>
+          <div class="font-extrabold text-sm text-[#0f3564] group-hover:text-[#1362a7]">${c.title}</div>
+          <div class="text-xs text-slate-500 mt-1">${c.desc}</div>
+        </button>
+      `).join("");
+    }
+
+    // =========================================================================
+    // 9. LABORATOIRE VIRTUEL : 4 SIMULATEURS CANVAS TEMPS RÉEL BILINGUES
+    // =========================================================================
+    let simPaused = false;
+    let simTime = 0;
+    let lastFrameTs = 0;
+
+    // État physique des 4 bancs d'essai
+    const simState = {
+      optics: {
+        lambda: 550,   // nm (400 - 700)
+        n: 1.38,       // indice de réfraction
+        thickness: 300 // nm
+      },
+      mechanics: {
+        m: 1.0,        // kg
+        k: 25.0,       // N/m
+        lambda: 0.35,  // s^-1
+        F0: 0.0,       // N (0 = libre, >0 = forcé)
+        x: 1.0,
+        v: 0.0,
+        history: [],
+        phaseTrail: []
+      },
+      rlc: {
+        R: 30,         // Ohm
+        L: 50,         // mH
+        C: 2.0,        // uF
+        E: 5.0,        // V
+        mode: 0        // 0 = Échelon (Step), 1 = Sinusoïdal AC
+      },
+      quantum: {
+        L: 1.0,        // nm
+        n: 2           // niveau quantique (1 à 5)
+      }
+    };
+
+    function selectSimulator(simId) {
+      appState.activeSim = simId;
+      document.querySelectorAll(".sim-tab-btn").forEach(btn => {
+        const active = btn.id === `tabSim-${simId}`;
+        btn.className = active
+          ? "sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1362a7] text-white shadow transition"
+          : "sim-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 transition";
+      });
+      renderSimulatorUI();
+      resizePhysicsCanvas();
+    }
+
+    function toggleSimPause() {
+      simPaused = !simPaused;
+      const btn = document.getElementById("btnSimPlayPause");
+      const status = document.getElementById("simStatusIndicator");
+      if (simPaused) {
+        btn.innerHTML = appState.lang === "fr" ? "▶ Reprendre" : "▶ Resume";
+        btn.className = "px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-bold transition shadow-xs";
+        status.textContent = "● PAUSE";
+      } else {
+        btn.innerHTML = "⏸ Pause";
+        btn.className = "px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition shadow-xs";
+        status.textContent = "● RUN • 60 FPS";
+      }
+    }
+
+    function resetActiveSimulator() {
+      simTime = 0;
+      if (appState.activeSim === "optics") {
+        simState.optics = { lambda: 550, n: 1.38, thickness: 300 };
+      } else if (appState.activeSim === "mechanics") {
+        simState.mechanics = { m: 1.0, k: 25.0, lambda: 0.35, F0: 0.0, x: 1.0, v: 0.0, history: [], phaseTrail: [] };
+      } else if (appState.activeSim === "rlc") {
+        simState.rlc = { R: 30, L: 50, C: 2.0, E: 5.0, mode: 0 };
+      } else if (appState.activeSim === "quantum") {
+        simState.quantum = { L: 1.0, n: 2 };
+      }
+      renderSimulatorUI();
+    }
+
+    function wavelengthToRGB(wl) {
+      let r = 0, g = 0, b = 0;
+      if (wl >= 380 && wl < 440) { r = -(wl - 440) / 60; g = 0; b = 1; }
+      else if (wl >= 440 && wl < 490) { r = 0; g = (wl - 440) / 50; b = 1; }
+      else if (wl >= 490 && wl < 510) { r = 0; g = 1; b = -(wl - 510) / 20; }
+      else if (wl >= 510 && wl < 580) { r = (wl - 510) / 70; g = 1; b = 0; }
+      else if (wl >= 580 && wl < 645) { r = 1; g = -(wl - 645) / 65; b = 0; }
+      else if (wl >= 645 && wl <= 780) { r = 1; g = 0; b = 0; }
+      return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+    }
+
+    function renderSimulatorUI() {
+      const lang = appState.lang;
+      const sim = appState.activeSim;
+      const titleEl = document.getElementById("activeSimTitle");
+      const subEl = document.getElementById("activeSimSubtitle");
+      const slidersBox = document.getElementById("simSlidersContainer");
+
+      if (sim === "optics") {
+        titleEl.textContent = lang === "fr" ? "Banc 1 : Interférences & Lame Mince" : "Bench 1: Interference & Thin Film";
+        subEl.textContent = lang === "fr"
+          ? "Visualisation des rayons réfléchis/transmis sur lame mince et du profil d'intensité I(x)."
+          : "Visualization of reflected/transmitted rays on a thin film and interference irradiance profile I(x).";
+
+        const st = simState.optics;
+        slidersBox.innerHTML = `
+          ${makeSliderHTML("optics", "lambda", lang === "fr" ? "Longueur d'onde λ₀ (nm)" : "Wavelength λ₀ (nm)", 400, 700, 1, st.lambda, "nm")}
+          ${makeSliderHTML("optics", "n", lang === "fr" ? "Indice de réfraction n" : "Refractive Index n", 1.10, 2.40, 0.01, st.n, "")}
+          ${makeSliderHTML("optics", "thickness", lang === "fr" ? "Épaisseur de la lame e (nm)" : "Film Thickness e (nm)", 50, 1000, 5, st.thickness, "nm")}
+        `;
+      } else if (sim === "mechanics") {
+        titleEl.textContent = lang === "fr" ? "Banc 2 : Oscillateur Harmonique & Portrait de Phase" : "Bench 2: Harmonic Oscillator & Phase Portrait";
+        subEl.textContent = lang === "fr"
+          ? "Ressort animé, élongation temporelle x(t) et trajectoire dans l'espace des phases (x, dx/dt)."
+          : "Animated mass-spring, time displacement x(t), and trajectory in phase space (x, dx/dt).";
+
+        const st = simState.mechanics;
+        slidersBox.innerHTML = `
+          ${makeSliderHTML("mechanics", "m", lang === "fr" ? "Masse m (kg)" : "Mass m (kg)", 0.2, 5.0, 0.1, st.m, "kg")}
+          ${makeSliderHTML("mechanics", "k", lang === "fr" ? "Raideur k (N/m)" : "Stiffness k (N/m)", 5, 80, 1, st.k, "N/m")}
+          ${makeSliderHTML("mechanics", "lambda", lang === "fr" ? "Amortissement λ (s⁻¹)" : "Damping λ (s⁻¹)", 0.0, 2.5, 0.05, st.lambda, "s⁻¹")}
+          ${makeSliderHTML("mechanics", "F0", lang === "fr" ? "Forçage F₀ (N)" : "Driving Force F₀ (N)", 0.0, 15.0, 0.5, st.F0, "N")}
+        `;
+      } else if (sim === "rlc") {
+        titleEl.textContent = lang === "fr" ? "Banc 3 : Circuit RLC Série & Oscilloscope" : "Bench 3: Series RLC Circuit & Oscilloscope";
+        subEl.textContent = lang === "fr"
+          ? "Tracé double voie u_C(t) et i(t) sur oscilloscope avec calcul de f₀ et du facteur de qualité Q."
+          : "Dual-trace oscilloscope display of u_C(t) and i(t) with real-time f₀ and quality factor Q.";
+
+        const st = simState.rlc;
+        slidersBox.innerHTML = `
+          ${makeSliderHTML("rlc", "R", lang === "fr" ? "Résistance R (Ω)" : "Resistance R (Ω)", 5, 450, 5, st.R, "Ω")}
+          ${makeSliderHTML("rlc", "L", lang === "fr" ? "Inductance L (mH)" : "Inductance L (mH)", 10, 200, 5, st.L, "mH")}
+          ${makeSliderHTML("rlc", "C", lang === "fr" ? "Capacité C (µF)" : "Capacitance C (µF)", 0.5, 10.0, 0.5, st.C, "µF")}
+          ${makeSliderHTML("rlc", "E", lang === "fr" ? "Tension générateur E (V)" : "Source Voltage E (V)", 1, 12, 0.5, st.E, "V")}
+          <div class="pt-1">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">${lang === "fr" ? "Signal d'excitation GBF" : "Function Generator Mode"}</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="simState.rlc.mode=0; renderSimulatorUI()"
+                class="py-1.5 px-2 rounded-lg text-xs font-bold border ${st.mode === 0 ? 'bg-[#1362a7] text-white border-[#1362a7]' : 'bg-slate-50 text-slate-700 border-slate-200'}">
+                ${lang === "fr" ? "Échelon (Transitoire)" : "Step (Transient)"}
+              </button>
+              <button type="button" onclick="simState.rlc.mode=1; renderSimulatorUI()"
+                class="py-1.5 px-2 rounded-lg text-xs font-bold border ${st.mode === 1 ? 'bg-[#1362a7] text-white border-[#1362a7]' : 'bg-slate-50 text-slate-700 border-slate-200'}">
+                ${lang === "fr" ? "Sinusoïdal (AC)" : "Sinusoidal (AC)"}
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (sim === "quantum") {
+        titleEl.textContent = lang === "fr" ? "Banc 4 : Puits de Potentiel Quantique" : "Bench 4: Quantum Potential Well";
+        subEl.textContent = lang === "fr"
+          ? "États stationnaires ψ_n(x), densité de probabilité |ψ_n(x)|² et niveaux quantifiés E_n."
+          : "Stationary states ψ_n(x), probability density |ψ_n(x)|², and quantized energy levels E_n.";
+
+        const st = simState.quantum;
+        slidersBox.innerHTML = `
+          ${makeSliderHTML("quantum", "L", lang === "fr" ? "Largeur du puits L (nm)" : "Well Width L (nm)", 0.4, 2.5, 0.1, st.L, "nm")}
+          ${makeSliderHTML("quantum", "n", lang === "fr" ? "Nombre quantique n" : "Quantum Number n", 1, 5, 1, st.n, "")}
+        `;
+      }
+      updateSimMeasurements();
+    }
+
+    function makeSliderHTML(simKey, prop, label, min, max, step, val, unit) {
+      return `
+        <div>
+          <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+            <span>${label}</span>
+            <span id="val-${simKey}-${prop}" class="font-mono font-bold text-[#1362a7]">${val} ${unit}</span>
+          </div>
+          <input type="range" min="${min}" max="${max}" step="${step}" value="${val}"
+            oninput="updateSimParam('${simKey}', '${prop}', parseFloat(this.value), '${unit}')"
+            class="w-full accent-[#1362a7] cursor-pointer" />
+        </div>
+      `;
+    }
+
+    function updateSimParam(simKey, prop, val, unit) {
+      simState[simKey][prop] = val;
+      const badge = document.getElementById(`val-${simKey}-${prop}`);
+      if (badge) badge.textContent = `${val} ${unit}`;
+      if (simKey === "mechanics" && (prop === "m" || prop === "k")) {
+        simState.mechanics.phaseTrail = [];
+      }
+      updateSimMeasurements();
+    }
+
+    function updateSimMeasurements() {
+      const lang = appState.lang;
+      const sim = appState.activeSim;
+      const box = document.getElementById("simReadoutsGrid");
+
+      if (sim === "optics") {
+        const { lambda, n, thickness } = simState.optics;
+        const delta = 2 * n * thickness + lambda / 2;
+        const order = delta / lambda;
+        const reflectance = Math.pow(Math.cos(Math.PI * order), 2) * 100;
+        const eAntiReflet = lambda / (4 * n);
+
+        box.innerHTML = `
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Diff. de marche δ" : "Path diff. δ"}</div>
+            <div class="font-mono font-extrabold text-[#0f3564]">${delta.toFixed(1)} nm</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Ordre p = δ/λ₀" : "Order p = δ/λ₀"}</div>
+            <div class="font-mono font-extrabold text-[#1362a7]">${order.toFixed(2)}</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Réflectivité rel." : "Rel. Reflectance"}</div>
+            <div class="font-mono font-extrabold text-emerald-700">${reflectance.toFixed(1)} %</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "e_min antireflet" : "AR e_min"}</div>
+            <div class="font-mono font-extrabold text-amber-700">${eAntiReflet.toFixed(1)} nm</div>
+          </div>
+        `;
+      } else if (sim === "mechanics") {
+        const { m, k, lambda } = simState.mechanics;
+        const w0 = Math.sqrt(k / m);
+        const f0 = w0 / (2 * Math.PI);
+        const Q = lambda > 0 ? w0 / (2 * lambda) : Infinity;
+        const regime = lambda === 0
+          ? (lang === "fr" ? "Harmonique libre" : "Undamped")
+          : (lambda < w0 ? (lang === "fr" ? "Pseudo-périodique" : "Underdamped") : (lang === "fr" ? "Apériodique" : "Overdamped"));
+
+        box.innerHTML = `
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Pulsation ω₀" : "Ang. freq. ω₀"}</div>
+            <div class="font-mono font-extrabold text-[#0f3564]">${w0.toFixed(2)} rad/s</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Fréquence f₀" : "Frequency f₀"}</div>
+            <div class="font-mono font-extrabold text-[#1362a7]">${f0.toFixed(2)} Hz</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Facteur Q" : "Q Factor"}</div>
+            <div class="font-mono font-extrabold text-emerald-700">${Q === Infinity ? "∞" : Q.toFixed(2)}</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Régime" : "Regime"}</div>
+            <div class="font-bold text-slate-800 truncate">${regime}</div>
+          </div>
+        `;
+      } else if (sim === "rlc") {
+        const { R, L, C, E } = simState.rlc;
+        const L_H = L * 1e-3;
+        const C_F = C * 1e-6;
+        const w0 = 1 / Math.sqrt(L_H * C_F);
+        const f0 = w0 / (2 * Math.PI);
+        const Q = (1 / R) * Math.sqrt(L_H / C_F);
+        const Rc = 2 * Math.sqrt(L_H / C_F);
+
+        box.innerHTML = `
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Fréquence f₀" : "Resonance f₀"}</div>
+            <div class="font-mono font-extrabold text-[#0f3564]">${f0.toFixed(1)} Hz</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Facteur Q" : "Quality Q"}</div>
+            <div class="font-mono font-extrabold text-[#1362a7]">${Q.toFixed(2)}</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "R critique" : "Critical R_c"}</div>
+            <div class="font-mono font-extrabold text-amber-700">${Rc.toFixed(1)} Ω</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Courant réson. I₀" : "Res. Current I₀"}</div>
+            <div class="font-mono font-extrabold text-emerald-700">${((E / R) * 1000).toFixed(0)} mA</div>
+          </div>
+        `;
+      } else if (sim === "quantum") {
+        const { L, n } = simState.quantum;
+        // E1 en eV pour un électron dans L (nm) : E1 ≈ 0.37603 / L^2
+        const E1 = 0.37603 / (L * L);
+        const En = n * n * E1;
+        const nodes = n - 1;
+        const dE = n > 1 ? (En - (n - 1) * (n - 1) * E1) : 0;
+
+        box.innerHTML = `
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Énergie E_n" : "Energy E_n"}</div>
+            <div class="font-mono font-extrabold text-[#0f3564]">${En.toFixed(3)} eV</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Fondamental E₁" : "Ground E₁"}</div>
+            <div class="font-mono font-extrabold text-[#1362a7]">${E1.toFixed(3)} eV</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">${lang === "fr" ? "Nœuds internes" : "Internal Nodes"}</div>
+            <div class="font-mono font-extrabold text-purple-700">${nodes}</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="text-[11px] text-slate-500">ΔE (n → n-1)</div>
+            <div class="font-mono font-extrabold text-emerald-700">${n > 1 ? dE.toFixed(2) + " eV" : "—"}</div>
+          </div>
+        `;
+      }
+    }
+
+    function resizePhysicsCanvas() {
+      const wrapper = document.getElementById("simCanvasWrapper");
+      const canvas = document.getElementById("physicsCanvas");
+      if (!wrapper || !canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = wrapper.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        const ctx = canvas.getContext("2d");
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+    }
+
+    function drawSimulatorFrame(dt) {
+      const canvas = document.getElementById("physicsCanvas");
+      const wrapper = document.getElementById("simCanvasWrapper");
+      if (!canvas || !wrapper) return;
+      const ctx = canvas.getContext("2d");
+      const W = wrapper.clientWidth || 640;
+      const H = wrapper.clientHeight || 400;
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#020617";
+      ctx.fillRect(0, 0, W, H);
+
+      const sim = appState.activeSim;
+      if (sim === "optics") renderOpticsCanvas(ctx, W, H);
+      else if (sim === "mechanics") renderMechanicsCanvas(ctx, W, H, dt);
+      else if (sim === "rlc") renderRLCCanvas(ctx, W, H);
+      else if (sim === "quantum") renderQuantumCanvas(ctx, W, H);
+    }
+
+    // --- DESSIN BANC 1 : INTERFÉRENCES & LAME MINCE ---
+    function renderOpticsCanvas(ctx, W, H) {
+      const { lambda, n, thickness } = simState.optics;
+      const beamColor = wavelengthToRGB(lambda);
+      const lang = appState.lang;
+
+      // Partie haute : Schéma optique animé de la lame mince
+      const topH = H * 0.54;
+      const filmY = topH * 0.45;
+      const filmH = Math.max(24, Math.min(72, thickness / 14));
+
+      // Lame mince diélectrique
+      ctx.fillStyle = "rgba(56, 189, 248, 0.16)";
+      ctx.fillRect(30, filmY, W - 60, filmH);
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(30, filmY, W - 60, filmH);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "12px monospace";
+      ctx.fillText(`Air (n₀ = 1.00)`, 40, filmY - 10);
+      ctx.fillStyle = "#7dd3fc";
+      ctx.fillText(`n = ${n.toFixed(2)}, e = ${thickness} nm`, W - 210, filmY + filmH / 2 + 4);
+
+      // Rayons incidents, réfléchis et transmis avec phase animée
+      const x0 = W * 0.18;
+      const x1 = W * 0.34;
+      const x2 = x1 + filmH * 0.55;
+      const x3 = x2 + filmH * 0.55;
+      const x4 = x3 + W * 0.16;
+
+      ctx.save();
+      ctx.strokeStyle = beamColor;
+      ctx.lineWidth = 3;
+      ctx.setLineDash([10, 6]);
+      ctx.lineDashOffset = -simTime * 55;
+
+      // Incident
+      ctx.beginPath();
+      ctx.moveTo(x0, 18);
+      ctx.lineTo(x1, filmY);
+      // Réfléchi 1
+      ctx.moveTo(x1, filmY);
+      ctx.lineTo(x1 + (x1 - x0), 18);
+      // Réfracté + réfléchi interne + réfléchi 2
+      ctx.moveTo(x1, filmY);
+      ctx.lineTo(x2, filmY + filmH);
+      ctx.lineTo(x3, filmY);
+      ctx.lineTo(x4, 18);
+      // Transmis
+      ctx.moveTo(x2, filmY + filmH);
+      ctx.lineTo(x2 + (x1 - x0), topH - 12);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = beamColor;
+      ctx.font = "bold 12px monospace";
+      ctx.fillText(`λ₀ = ${lambda} nm`, x0 - 10, 32);
+      ctx.fillText("R₁", x1 + (x1 - x0) - 18, 32);
+      ctx.fillText("R₂", x4 + 6, 32);
+
+      // Partie basse : Profil d'intensité I(x) et franges lumineuses
+      const plotY = topH + 14;
+      const plotH = H - plotY - 24;
+      ctx.strokeStyle = "#1e293b";
+      ctx.strokeRect(30, plotY, W - 60, plotH);
+
+      // Bande de franges colorées
+      const fringeBandH = 26;
+      const graphH = plotH - fringeBandH - 10;
+      const deltaBase = 2 * n * thickness + lambda / 2;
+
+      for (let px = 31; px < W - 31; px++) {
+        const u = (px - 31) / (W - 62); // variation locale d'épaisseur / incidence
+        const localDelta = deltaBase + (u - 0.5) * 4 * lambda;
+        const intensity = Math.pow(Math.cos((Math.PI * localDelta) / lambda), 2);
+        ctx.fillStyle = beamColor;
+        ctx.globalAlpha = 0.1 + 0.9 * intensity;
+        ctx.fillRect(px, plotY + 2, 1.5, fringeBandH);
+      }
+      ctx.globalAlpha = 1;
+
+      // Courbe I(x)
+      ctx.beginPath();
+      ctx.strokeStyle = beamColor;
+      ctx.lineWidth = 2.5;
+      for (let px = 31; px < W - 31; px++) {
+        const u = (px - 31) / (W - 62);
+        const localDelta = deltaBase + (u - 0.5) * 4 * lambda;
+        const intensity = Math.pow(Math.cos((Math.PI * localDelta) / lambda), 2);
+        const py = plotY + fringeBandH + 8 + graphH * (1 - intensity * 0.88);
+        if (px === 31) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "#cbd5e1";
+      ctx.font = "11px monospace";
+      ctx.fillText(lang === "fr" ? "Franges & Profil d'intensité I(x) = I_max·cos²(πδ/λ₀)" : "Interference Fringes & Irradiance I(x) = I_max·cos²(πδ/λ₀)", 36, H - 7);
+    }
+
+    // --- DESSIN BANC 2 : OSCILLATEUR HARMONIQUE & PORTRAIT DE PHASE ---
+    function renderMechanicsCanvas(ctx, W, H, dt) {
+      const st = simState.mechanics;
+      const w0 = Math.sqrt(st.k / st.m);
+      const lang = appState.lang;
+
+      if (!simPaused) {
+        // Intégration RK4 / Euler symplectique sub-stepped
+        const subSteps = 6;
+        const h = Math.min(dt, 0.04) / subSteps;
+        for (let i = 0; i < subSteps; i++) {
+          const drive = st.F0 > 0 ? (st.F0 / st.m) * Math.cos(w0 * simTime) : 0;
+          const acc = -w0 * w0 * st.x - 2 * st.lambda * st.v + drive;
+          st.v += acc * h;
+          st.x += st.v * h;
+        }
+        st.history.push(st.x);
+        if (st.history.length > 260) st.history.shift();
+        st.phaseTrail.push({ x: st.x, v: st.v / w0 });
+        if (st.phaseTrail.length > 350) st.phaseTrail.shift();
+      }
+
+      // 1. Haut : Ressort & masse animés
+      const topH = H * 0.34;
+      const wallX = 45;
+      const eqX = W * 0.48;
+      const scaleX = Math.min(W * 0.22, 110);
+      const massX = Math.max(wallX + 60, Math.min(W - 65, eqX + st.x * scaleX));
+      const midY = topH * 0.54;
+
+      // Mur fixe
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(wallX, 20);
+      ctx.lineTo(wallX, topH - 16);
+      ctx.stroke();
+
+      // Axe d'équilibre
+      ctx.strokeStyle = "#334155";
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(eqX, 18);
+      ctx.lineTo(eqX, topH - 14);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Ressort en zigzag
+      ctx.strokeStyle = "#34d399";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(wallX, midY);
+      const coils = 14;
+      const span = massX - 24 - wallX;
+      for (let i = 1; i < coils; i++) {
+        const cx = wallX + (span * i) / coils;
+        const cy = midY + (i % 2 === 0 ? -13 : 13);
+        ctx.lineTo(cx, cy);
+      }
+      ctx.lineTo(massX - 24, midY);
+      ctx.stroke();
+
+      // Masse m
+      ctx.fillStyle = "#1362a7";
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(massX - 24, midY - 22, 48, 44, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 12px monospace";
+      ctx.fillText("m", massX - 5, midY + 4);
+
+      // 2. Bas gauche : Élongation temporelle x(t)
+      const botY = topH + 10;
+      const botH = H - botY - 18;
+      const leftW = W * 0.56 - 25;
+
+      ctx.strokeStyle = "#1e293b";
+      ctx.strokeRect(20, botY, leftW, botH);
+      ctx.beginPath();
+      ctx.moveTo(20, botY + botH / 2);
+      ctx.lineTo(20 + leftW, botY + botH / 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.2;
+      st.history.forEach((val, idx) => {
+        const px = 22 + (idx / 260) * (leftW - 4);
+        const py = botY + botH / 2 - Math.max(-1.6, Math.min(1.6, val)) * (botH * 0.28);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "11px monospace";
+      ctx.fillText(lang === "fr" ? "Élongation x(t)" : "Displacement x(t)", 28, botY + 16);
+
+      // 3. Bas droite : Portrait de phase (x, v/ω₀)
+      const rightX = 20 + leftW + 14;
+      const rightW = W - rightX - 20;
+      const cx0 = rightX + rightW / 2;
+      const cy0 = botY + botH / 2;
+
+      ctx.strokeStyle = "#1e293b";
+      ctx.strokeRect(rightX, botY, rightW, botH);
+      ctx.beginPath();
+      ctx.moveTo(rightX, cy0);
+      ctx.lineTo(rightX + rightW, cy0);
+      ctx.moveTo(cx0, botY);
+      ctx.lineTo(cx0, botY + botH);
+      ctx.stroke();
+
+      const rad = Math.min(rightW, botH) * 0.32;
+      ctx.beginPath();
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 2;
+      st.phaseTrail.forEach((pt, idx) => {
+        const px = cx0 + Math.max(-1.4, Math.min(1.4, pt.x)) * rad;
+        const py = cy0 - Math.max(-1.4, Math.min(1.4, pt.v)) * rad;
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      if (st.phaseTrail.length > 0) {
+        const last = st.phaseTrail[st.phaseTrail.length - 1];
+        ctx.fillStyle = "#f43f5e";
+        ctx.beginPath();
+        ctx.arc(cx0 + Math.max(-1.4, Math.min(1.4, last.x)) * rad, cy0 - Math.max(-1.4, Math.min(1.4, last.v)) * rad, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = "#fbbf24";
+      ctx.fillText(lang === "fr" ? "Phase (x, v)" : "Phase (x, v)", rightX + 8, botY + 16);
+    }
+
+    // --- DESSIN BANC 3 : CIRCUIT RLC SÉRIE & OSCILLOSCOPE DOUBLE VOIE ---
+    function renderRLCCanvas(ctx, W, H) {
+      const { R, L, C, E, mode } = simState.rlc;
+      const lang = appState.lang;
+      const L_H = L * 1e-3;
+      const C_F = C * 1e-6;
+      const w0 = 1 / Math.sqrt(L_H * C_F);
+      const alpha = R / (2 * L_H);
+
+      // Grille d'oscilloscope vert/bleu nuit
+      const padL = 48, padR = 24, padT = 34, padB = 32;
+      const gW = W - padL - padR;
+      const gH = H - padT - padB;
+      const midY = padT + gH / 2;
+
+      ctx.fillStyle = "#04131c";
+      ctx.fillRect(padL, padT, gW, gH);
+
+      ctx.strokeStyle = "#0f3947";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 10; i++) {
+        const gx = padL + (gW * i) / 10;
+        ctx.beginPath(); ctx.moveTo(gx, padT); ctx.lineTo(gx, padT + gH); ctx.stroke();
+      }
+      for (let j = 0; j <= 8; j++) {
+        const gy = padT + (gH * j) / 8;
+        ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + gW, gy); ctx.stroke();
+      }
+
+      // Axe central
+      ctx.strokeStyle = "#1e5f74";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(padL, midY); ctx.lineTo(padL + gW, midY); ctx.stroke();
+
+      const tMax = 0.025; // 25 ms d'écran
+      const vScale = (gH * 0.42) / 12; // 12 V pleine échelle
+
+      // Voie 1 : u_C(t) en jaune vif
+      ctx.beginPath();
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 2.6;
+
+      // Voie 2 : i(t) normalisé en cyan
+      const iPoints = [];
+
+      for (let px = 0; px <= gW; px++) {
+        const t = (px / gW) * tMax;
+        let uC = 0;
+        let curr = 0;
+
+        if (mode === 0) {
+          // Réponse indicielle à un échelon E
+          const disc = alpha * alpha - w0 * w0;
+          if (disc < -1e-3) {
+            const wd = Math.sqrt(-disc);
+            uC = E * (1 - Math.exp(-alpha * t) * (Math.cos(wd * t) + (alpha / wd) * Math.sin(wd * t)));
+            curr = ((E / (L_H * wd)) * Math.exp(-alpha * t) * Math.sin(wd * t));
+          } else if (Math.abs(disc) <= 1e-3) {
+            uC = E * (1 - (1 + alpha * t) * Math.exp(-alpha * t));
+            curr = (E / L_H) * t * Math.exp(-alpha * t);
+          } else {
+            const s1 = -alpha + Math.sqrt(disc);
+            const s2 = -alpha - Math.sqrt(disc);
+            uC = E * (1 + (s2 * Math.exp(s1 * t) - s1 * Math.exp(s2 * t)) / (s1 - s2));
+            curr = (E / (L_H * (s1 - s2))) * (Math.exp(s1 * t) - Math.exp(s2 * t));
+          }
+        } else {
+          // Régime sinusoïdal animé autour de ω₀
+          const wDrive = w0;
+          const phase = wDrive * (t + simTime * 0.008);
+          const Q = (1 / R) * Math.sqrt(L_H / C_F);
+          uC = E * Math.min(Q, 2.2) * Math.sin(phase - Math.PI / 2);
+          curr = (E / R) * Math.sin(phase);
+        }
+
+        const y1 = midY - uC * vScale;
+        if (px === 0) ctx.moveTo(padL + px, y1);
+        else ctx.lineTo(padL + px, y1);
+
+        iPoints.push({ x: padL + px, y: midY - curr * R * vScale * 0.75 });
+      }
+      ctx.stroke();
+
+      // Tracé Voie 2 : i(t)
+      ctx.beginPath();
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2;
+      iPoints.forEach((pt, idx) => {
+        if (idx === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      });
+      ctx.stroke();
+
+      // Légendes oscilloscope
+      ctx.fillStyle = "#facc15";
+      ctx.font = "bold 12px monospace";
+      ctx.fillText("CH1: u_C(t) [V]", padL + 8, 22);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillText("CH2: i(t) [mA]", padL + 165, 22);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillText(lang === "fr" ? "Base de temps : 2.5 ms/div" : "Timebase: 2.5 ms/div", W - 215, 22);
+    }
+
+    // --- DESSIN BANC 4 : PUITS DE POTENTIEL QUANTIQUE ---
+    function renderQuantumCanvas(ctx, W, H) {
+      const { L, n } = simState.quantum;
+      const lang = appState.lang;
+      const marginX = 65;
+      const wellLeft = marginX + (2.5 - L) * 35;
+      const wellRight = W - marginX - (2.5 - L) * 35;
+      const wellW = Math.max(140, wellRight - wellLeft);
+      const topY = 36;
+      const botY = H - 36;
+
+      // Parois infinies du puits V(x) -> +∞
+      ctx.fillStyle = "rgba(124, 58, 237, 0.14)";
+      ctx.fillRect(20, topY, wellLeft - 20, botY - topY);
+      ctx.fillRect(wellRight, topY, W - 20 - wellRight, botY - topY);
+
+      ctx.strokeStyle = "#a78bfa";
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(wellLeft, topY);
+      ctx.lineTo(wellLeft, botY);
+      ctx.lineTo(wellRight, botY);
+      ctx.lineTo(wellRight, topY);
+      ctx.stroke();
+
+      // Lignes des niveaux d'énergie E_1 .. E_5
+      for (let level = 1; level <= 5; level++) {
+        const ly = botY - ((level * level) / 27) * (botY - topY - 20) - 12;
+        ctx.strokeStyle = level === n ? "#38bdf8" : "#334155";
+        ctx.lineWidth = level === n ? 1.5 : 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(wellLeft, ly);
+        ctx.lineTo(wellRight, ly);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = level === n ? "#38bdf8" : "#64748b";
+        ctx.font = level === n ? "bold 11px monospace" : "10px monospace";
+        ctx.fillText(`n=${level}`, wellRight + 8, ly + 4);
+      }
+
+      // Niveau actif : Fonction d'onde ψ_n(x) animée et densité |ψ_n(x)|²
+      const activeY = botY - ((n * n) / 27) * (botY - topY - 20) - 12;
+      const amp = 34;
+      const phaseFactor = Math.cos(simTime * 3.2);
+
+      // Densité de probabilité |ψ_n(x)|² remplie
+      ctx.beginPath();
+      ctx.moveTo(wellLeft, activeY);
+      for (let i = 0; i <= 200; i++) {
+        const u = i / 200;
+        const px = wellLeft + u * wellW;
+        const prob = Math.pow(Math.sin(n * Math.PI * u), 2);
+        const py = activeY - prob * amp * 1.15;
+        ctx.lineTo(px, py);
+      }
+      ctx.lineTo(wellRight, activeY);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(244, 63, 94, 0.25)";
+      ctx.fill();
+
+      // Courbe |ψ_n(x)|²
+      ctx.beginPath();
+      ctx.strokeStyle = "#f43f5e";
+      ctx.lineWidth = 2;
+      for (let i = 0; i <= 200; i++) {
+        const u = i / 200;
+        const px = wellLeft + u * wellW;
+        const prob = Math.pow(Math.sin(n * Math.PI * u), 2);
+        const py = activeY - prob * amp * 1.15;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Courbe Re[ψ_n(x,t)]
+      ctx.beginPath();
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.6;
+      for (let i = 0; i <= 200; i++) {
+        const u = i / 200;
+        const px = wellLeft + u * wellW;
+        const psi = Math.sin(n * Math.PI * u) * phaseFactor;
+        const py = activeY - psi * amp;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Légendes
+      ctx.fillStyle = "#38bdf8";
+      ctx.font = "bold 12px monospace";
+      ctx.fillText(`Re[ψ_${n}(x,t)]`, 26, 22);
+      ctx.fillStyle = "#f43f5e";
+      ctx.fillText(`|ψ_${n}(x)|²`, 145, 22);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillText(`L = ${L.toFixed(1)} nm`, wellLeft + wellW / 2 - 32, H - 12);
+      ctx.fillText(lang === "fr" ? "Puits infini V(x)=0" : "Infinite Well V(x)=0", W - 165, 22);
+    }
+
+    function animationLoop(ts) {
+      if (!lastFrameTs) lastFrameTs = ts;
+      const dt = (ts - lastFrameTs) / 1000;
+      lastFrameTs = ts;
+
+      if (!simPaused) {
+        simTime += Math.min(dt, 0.05);
+      }
+
+      if (!document.getElementById("section-laboratoire").classList.contains("hidden")) {
+        drawSimulatorFrame(dt);
+      }
+      requestAnimationFrame(animationLoop);
+    }
+
+    // =========================================================================
+    // 10. EXERCICES DIRIGÉS & QCM INTERACTIF BILINGUE (6 QUESTIONS)
+    // =========================================================================
+    function renderExercisesView() {
+      const lang = appState.lang;
+      const dict = TRANSLATIONS[lang];
+
+      const topics = ["ALL", ...new Set(EXERCISES_LIST.map(e => e.topic.fr))];
+      document.getElementById("exTopicFilters").innerHTML = topics.map(tFr => {
+        const label = tFr === "ALL"
+          ? dict.allTopics
+          : (EXERCISES_LIST.find(e => e.topic.fr === tFr)?.topic[lang] || tFr);
+        const active = activeExerciseFilter === tFr;
+        return `
+          <button onclick="activeExerciseFilter='${tFr}'; renderExercisesView()"
+            class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${active ? 'bg-[#1362a7] text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-blue-50'}">
+            ${label}
+          </button>
+        `;
+      }).join("");
+
+      const filtered = EXERCISES_LIST.filter(e => activeExerciseFilter === "ALL" || e.topic.fr === activeExerciseFilter);
+
+      document.getElementById("problemsListContainer").innerHTML = filtered.map(ex => `
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#1362a7]">${ex.topic[lang]}</span>
+            <span class="text-xs font-semibold text-slate-400">${ex.level[lang]}</span>
+          </div>
+          <h4 class="text-base sm:text-lg font-extrabold text-[#0f3564]">${ex.title[lang]}</h4>
+          <p class="text-sm text-slate-700 leading-relaxed">${ex.statement[lang]}</p>
+
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="toggleRevealBox('${ex.id}-hint', this, '${dict.btnShowHint}', '${dict.btnHideHint}')"
+              class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition">
+              ${dict.btnShowHint}
+            </button>
+            <button onclick="toggleRevealBox('${ex.id}-sol', this, '${dict.btnShowSol}', '${dict.btnHideSol}')"
+              class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition">
+              ${dict.btnShowSol}
+            </button>
+          </div>
+
+          <div id="${ex.id}-hint" class="hidden p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs sm:text-sm text-amber-950">
+            ${ex.hint[lang]}
+          </div>
+
+          <div id="${ex.id}-sol" class="hidden p-4 rounded-xl bg-slate-50 border-l-4 border-emerald-600 text-xs sm:text-sm text-slate-800 font-mono whitespace-pre-line leading-relaxed">
+            ${ex.solution[lang]}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function toggleRevealBox(boxId, btn, showLabel, hideLabel) {
+      const box = document.getElementById(boxId);
+      const isHidden = box.classList.contains("hidden");
+      box.classList.toggle("hidden", !isHidden);
+      btn.textContent = isHidden ? hideLabel : showLabel;
+    }
+
+    function renderQuiz() {
+      const lang = appState.lang;
+      let score = 0;
+
+      document.getElementById("quizQuestionsContainer").innerHTML = QUIZ_DATA.map((item, qIdx) => {
+        const chosen = quizAnswers[qIdx];
+        if (chosen === item.correct) score++;
+        const opts = item.options[lang];
+
+        return `
+          <div class="p-4 sm:p-5 rounded-xl bg-[#f4f7fb] border border-slate-200/80 space-y-3">
+            <p class="font-bold text-sm sm:text-base text-[#0f3564]">${item.q[lang]}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              ${opts.map((optText, oIdx) => {
+                let cls = "bg-white hover:bg-blue-50 border-slate-200 text-slate-700";
+                if (chosen !== undefined) {
+                  if (oIdx === item.correct) cls = "bg-emerald-100 border-emerald-500 text-emerald-950 font-bold";
+                  else if (oIdx === chosen) cls = "bg-rose-100 border-rose-500 text-rose-950 font-bold";
+                  else cls = "bg-white/60 border-slate-200 text-slate-400";
+                }
+                return `
+                  <button onclick="selectQuizOption(${qIdx}, ${oIdx})"
+                    class="text-left px-4 py-2.5 rounded-xl border text-xs sm:text-sm transition ${cls}">
+                    ${String.fromCharCode(65 + oIdx)}. ${optText}
+                  </button>
+                `;
+              }).join("")}
+            </div>
+            ${chosen !== undefined ? `
+              <div class="text-xs p-3 rounded-lg ${chosen === item.correct ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-rose-50 text-rose-900 border border-rose-200'}">
+                <strong>${chosen === item.correct ? (lang === 'fr' ? '✔ Correct !' : '✔ Correct!') : (lang === 'fr' ? '✘ Explication :' : '✘ Explanation:')}</strong>
+                ${item.explanation[lang]}
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("quizScoreDisplay").textContent = `Score : ${score} / ${QUIZ_DATA.length}`;
+    }
+
+    function selectQuizOption(qIdx, oIdx) {
+      quizAnswers[qIdx] = oIdx;
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      quizAnswers = {};
+      renderQuiz();
+    }
+
+    // =========================================================================
+    // 11. GESTION DES RESSOURCES, DRAG & DROP UPLOAD & EXPORT HTML/JSON
+    // =========================================================================
+    function initDropZone() {
+      const dz = document.getElementById("dropZoneBox");
+      if (!dz) return;
+
+      ["dragenter", "dragover"].forEach(evt => {
+        dz.addEventListener(evt, e => {
+          e.preventDefault();
+          dz.classList.add("dropzone-active");
+        });
+      });
+
+      ["dragleave", "drop"].forEach(evt => {
+        dz.addEventListener(evt, e => {
+          e.preventDefault();
+          dz.classList.remove("dropzone-active");
+        });
+      });
+
+      dz.addEventListener("drop", e => {
+        if (e.dataTransfer && e.dataTransfer.files) {
+          handleUploadedFiles(e.dataTransfer.files);
+        }
+      });
+    }
+
+    function handleUploadedFiles(fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) return;
+
+      const category = document.getElementById("uploadCategorySelect").value;
+
+      files.forEach(file => {
+        // Si fichier .json de sauvegarde de la plateforme
+        if (file.name.toLowerCase().endsWith(".json")) {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            try {
+              const imported = JSON.parse(ev.target.result);
+              if (imported && (imported.customCourses || imported.uploadedFiles)) {
+                if (Array.isArray(imported.customCourses)) {
+                  appState.customCourses = [...appState.customCourses, ...imported.customCourses];
+                }
+                if (Array.isArray(imported.uploadedFiles)) {
+                  appState.uploadedFiles = [...appState.uploadedFiles, ...imported.uploadedFiles];
+                }
+                persistState();
+                renderCoursesGrid();
+                renderResourcesView();
+                showToast(appState.lang === "fr"
+                  ? `Sauvegarde JSON "${file.name}" importée avec succès !`
+                  : `JSON backup "${file.name}" successfully imported!`);
+                return;
+              }
+            } catch (_) { /* Traité comme fichier normal sinon */ }
+            storeUploadedFileAsDataURL(file, category);
+          };
+          reader.readAsText(file);
+        } else {
+          storeUploadedFileAsDataURL(file, category);
+        }
+      });
+    }
+
+    function storeUploadedFileAsDataURL(file, category) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const entry = {
+          id: "up-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          name: file.name,
+          type: file.type || "application/octet-stream",
+          sizeKB: Math.max(1, Math.round(file.size / 1024)),
+          category: category,
+          date: new Date().toLocaleDateString(),
+          dataUrl: ev.target.result
+        };
+        appState.uploadedFiles.unshift(entry);
+        persistState();
+        renderResourcesView();
+        showToast(appState.lang === "fr"
+          ? `Fichier "${file.name}" ajouté à la bibliothèque.`
+          : `File "${file.name}" added to the library.`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderResourcesView() {
+      const lang = appState.lang;
+      const dict = TRANSLATIONS[lang];
+
+      // 1. Bibliothèque des fichiers uploadés
+      const upGrid = document.getElementById("uploadedFilesGrid");
+      document.getElementById("uploadedCountBadge").textContent = appState.uploadedFiles.length;
+
+      if (appState.uploadedFiles.length === 0) {
+        upGrid.innerHTML = `<div class="col-span-full text-center py-6 text-xs sm:text-sm text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">${dict.noUploadsMsg}</div>`;
+      } else {
+        upGrid.innerHTML = appState.uploadedFiles.map(f => {
+          const icon = f.name.endsWith(".pdf") ? "📕"
+            : f.name.endsWith(".py") ? "🐍"
+            : (f.name.endsWith(".xlsx") || f.name.endsWith(".csv")) ? "📊"
+            : f.type.startsWith("image/") ? "🖼️" : "📄";
+          return `
+            <div class="p-4 rounded-xl bg-[#f4f7fb] border border-slate-200 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="text-2xl shrink-0">${icon}</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm text-[#0f3564] truncate">${f.name}</div>
+                  <div class="text-xs text-slate-500">${f.category} • ${f.sizeKB} Ko • ${f.date}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="previewUploadedFile('${f.id}')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-blue-50 text-[#1362a7] border border-slate-200 text-xs font-bold">
+                  ${dict.previewBtn}
+                </button>
+                <a href="${f.dataUrl}" download="${f.name}" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">
+                  ⬇
+                </a>
+                <button onclick="deleteUploadedFile('${f.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold" title="${dict.deleteBtn}">
+                  ✕
+                </button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // 2. Fiches ressources intégrées
+      document.getElementById("builtinResourcesGrid").innerHTML = BUILTIN_RESOURCES.map(res => `
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#1362a7] mb-2">${res.badge}</span>
+            <h5 class="text-base font-extrabold text-[#0f3564] mb-1.5">${res.title[lang]}</h5>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${res.desc[lang]}</p>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100">
+            <button onclick="previewBuiltinResource('${res.id}')"
+              class="flex-1 px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1362a7] text-xs font-bold transition">
+              👁 ${dict.previewBtn}
+            </button>
+            <button onclick="downloadBuiltinResource('${res.id}')"
+              class="flex-1 px-3 py-2 rounded-xl bg-[#1362a7] hover:bg-[#0f3564] text-white text-xs font-bold transition">
+              ⬇ ${dict.btnDownloadFile}
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function previewUploadedFile(id) {
+      const f = appState.uploadedFiles.find(item => item.id === id);
+      if (!f) return;
+
+      document.getElementById("resModalHeading").textContent = f.name;
+      const body = document.getElementById("resModalBody");
+
+      if (f.type.startsWith("image/")) {
+        body.innerHTML = `<img src="${f.dataUrl}" alt="${f.name}" class="max-w-full mx-auto rounded-xl shadow" />`;
+      } else if (f.type === "application/pdf") {
+        body.innerHTML = `<iframe src="${f.dataUrl}" class="w-full h-[60vh] rounded-xl border border-slate-200"></iframe>`;
+      } else {
+        // Décodage texte si possible
+        try {
+          const base64 = f.dataUrl.split(",")[1];
+          const decoded = decodeURIComponent(escape(atob(base64)));
+          body.innerHTML = `<pre class="p-4 rounded-xl bg-slate-900 text-slate-100 text-xs font-mono overflow-x-auto whitespace-pre-wrap">${decoded.replace(/</g, "&lt;")}</pre>`;
+        } catch (_) {
+          body.innerHTML = `<p class="text-sm text-slate-600">Fichier binaire prêt au téléchargement (${f.sizeKB} Ko).</p>`;
+        }
+      }
+
+      const dlBtn = document.getElementById("resModalDownloadBtn");
+      dlBtn.onclick = () => {
+        const a = document.createElement("a");
+        a.href = f.dataUrl;
+        a.download = f.name;
+        a.click();
+      };
+
+      const modal = document.getElementById("resourcePreviewModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function deleteUploadedFile(id) {
+      appState.uploadedFiles = appState.uploadedFiles.filter(f => f.id !== id);
+      persistState();
+      renderResourcesView();
+    }
+
+    function previewBuiltinResource(resId) {
+      const res = BUILTIN_RESOURCES.find(r => r.id === resId);
+      if (!res) return;
+      document.getElementById("resModalHeading").textContent = res.title[appState.lang];
+      document.getElementById("resModalBody").innerHTML = `
+        <pre class="p-4 rounded-xl bg-slate-900 text-slate-100 text-xs sm:text-sm font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">${res.content.replace(/</g, "&lt;")}</pre>
+      `;
+      document.getElementById("resModalDownloadBtn").onclick = () => downloadBuiltinResource(res.id);
+      const modal = document.getElementById("resourcePreviewModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function downloadBuiltinResource(resId) {
+      const res = BUILTIN_RESOURCES.find(r => r.id === resId);
+      if (!res) return;
+      triggerFileDownload(res.filename, res.content, "text/plain;charset=utf-8");
+    }
+
+    function closeResourceModal() {
+      const modal = document.getElementById("resourcePreviewModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    // =========================================================================
+    // 12. AJOUT D'UN NOUVEAU CHAPITRE ENSEIGNANT
+    // =========================================================================
+    function handleCreateCourse(e) {
+      e.preventDefault();
+      const titleFr = document.getElementById("inpCourseTitleFr").value.trim();
+      const titleEn = document.getElementById("inpCourseTitleEn").value.trim();
+      const domFr = document.getElementById("inpCourseDomFr").value.trim();
+      const domEn = document.getElementById("inpCourseDomEn").value.trim();
+      const simId = document.getElementById("inpCourseSim").value;
+      const sumFr = document.getElementById("inpCourseSumFr").value.trim();
+      const sumEn = document.getElementById("inpCourseSumEn").value.trim();
+      const eqsRaw = document.getElementById("inpCourseEqs").value.trim();
+      const bodyFr = document.getElementById("inpCourseBodyFr").value.trim();
+      const bodyEn = document.getElementById("inpCourseBodyEn").value.trim();
+
+      const equations = eqsRaw.split("\n").map(s => s.trim()).filter(Boolean);
+
+      const newModule = {
+        id: "custom-" + Date.now(),
+        simId: simId,
+        accent: "#0d9488",
+        icon: "📘",
+        isCustom: true,
+        domain: { fr: domFr, en: domEn },
+        title: { fr: titleFr, en: titleEn },
+        summary: { fr: sumFr, en: sumEn },
+        objectives: { fr: [], en: [] },
+        equations: equations.length ? equations : ["E = h·ν"],
+        theory: { fr: bodyFr, en: bodyEn },
+        svgDiagram: ""
+      };
+
+      appState.customCourses.push(newModule);
+      persistState();
+      renderCoursesGrid();
+      e.target.reset();
+
+      showToast(appState.lang === "fr"
+        ? `Chapitre "${titleFr}" publié et sauvegardé !`
+        : `Chapter "${titleEn}" published and saved!`);
+      navigateTo("cours");
+    }
+
+    // =========================================================================
+    // 13. TÉLÉCHARGEMENT DE LA PLATEFORME AUTONOME (.HTML) & EXPORT (.JSON)
+    // =========================================================================
+    function triggerFileDownload(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function exportDataJSON() {
+      const payload = {
+        platform: "Ahmed Chouket General Physics Courses for University",
+        exportedAt: new Date().toISOString(),
+        lang: appState.lang,
+        customCourses: appState.customCourses,
+        uploadedFiles: appState.uploadedFiles
+      };
+      triggerFileDownload(
+        "Ahmed_Chouket_Physics_Data_Backup.json",
+        JSON.stringify(payload, null, 2),
+        "application/json;charset=utf-8"
+      );
+      showToast(appState.lang === "fr"
+        ? "Données exportées au format JSON."
+        : "Course data exported as JSON.");
+    }
+
+    function downloadStandaloneHTML() {
+      // Embarquer l'état actuel dans la balise #embedded-platform-data avant sérialisation
+      const dataTag = document.getElementById("embedded-platform-data");
+      const safeJson = JSON.stringify({
+        lang: appState.lang,
+        activeTab: "accueil",
+        activeSim: appState.activeSim,
+        customCourses: appState.customCourses,
+        uploadedFiles: appState.uploadedFiles
+      }).replace(/<\/script>/gi, "<\\/script>");
+
+      dataTag.textContent = safeJson;
+      const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      dataTag.textContent = "null";
+
+      triggerFileDownload(
+        "Ahmed_Chouket_General_Physics_Courses_For_University.html",
+        fullHtml,
+        "text/html;charset=utf-8"
+      );
+
+      showToast(appState.lang === "fr"
+        ? "Plateforme autonome téléchargée (Ahmed_Chouket_General_Physics_Courses_For_University.html) !"
+        : "Standalone platform downloaded (Ahmed_Chouket_General_Physics_Courses_For_University.html)!");
+    }
+
+    // =========================================================================
+    // 14. INITIALISATION AU CHARGEMENT DE LA PAGE
+    // =========================================================================
+    window.addEventListener("resize", () => {
+      if (!document.getElementById("section-laboratoire").classList.contains("hidden")) {
+        resizePhysicsCanvas();
+      }
+    });
+
+    window.onload = function () {
+      loadSavedState();
+      initDropZone();
+      setLanguage(appState.lang);
+      selectSimulator(appState.activeSim || "optics");
+      navigateTo(appState.activeTab || "accueil");
+      requestAnimationFrame(animationLoop);
+    };
+  </script>
+</body>
+</html>
